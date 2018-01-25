@@ -1,18 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.weebly.stevelosk.sewingpatternapp.MainActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Launchcode!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
-</android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.AppCompatImageButton
+
+            android:id="@+id/imgButtonTopLeft"
+            android:src="@drawable/button_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+
+            android:id="@+id/imgButtonTopRight"
+            android:src="@drawable/button_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.AppCompatImageButton
+
+            android:id="@+id/imgButtonBottomLeft"
+            android:src="@drawable/button_yellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+
+            android:id="@+id/imgButtonBottomRight"
+            android:src="@drawable/button_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
+
+</LinearLayout>
