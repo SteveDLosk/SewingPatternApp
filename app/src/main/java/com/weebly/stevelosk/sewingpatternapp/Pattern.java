@@ -119,7 +119,8 @@ public class Pattern {
         // we get a character that is not a numeric digit, the first number is completely read.
         for (int i = 0; i < chars.length; i++) {
             char current = chars[i];
-            if (current < 0 || current > 9) {
+            // if not a digit, first number is read.  Break.
+            if ( ! Character.isDigit(current)) {
                 break;
             }
             sbFront.append(current);
@@ -128,7 +129,7 @@ public class Pattern {
         boolean skip = true;  // logical flag, turns false on first digit read.
         for (int i = sbFront.length(); i < chars.length; i++) {
             char current = chars[i];
-            if (current >= 0 && current <= 9) {
+            if (Character.isDigit(current)) {
                 skip = false;
             }
             if (!skip) {
@@ -136,7 +137,7 @@ public class Pattern {
             }
         }
 
-        // Now, we have to StringBuilders, for the first and second part of the input string.
+        // Now, we have two StringBuilders, for the first and second part of the input string.
         // If either do not parse to an integer, the String is invalid, and we return false.
         try {
             int min = Integer.parseInt(sbFront.toString());
