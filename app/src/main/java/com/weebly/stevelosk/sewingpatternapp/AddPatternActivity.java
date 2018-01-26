@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class AddPatternActivity extends AppCompatActivity {
@@ -42,14 +43,13 @@ public class AddPatternActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            System.out.println("Got the pciture");
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            frontPic.setImageBitmap(imageBitmap);
-        }
-        else if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE && resultCode == RESULT_CANCELED) {
-            System.out.println("User canceled the activity");
-        }
+
+            if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                System.out.println("Got the pciture");
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                frontPic = (ImageView) findViewById(R.id.frontImage);
+                frontPic.setImageBitmap(imageBitmap);
+            }
     }
 }
