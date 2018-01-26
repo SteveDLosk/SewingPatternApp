@@ -14,6 +14,8 @@ public class AddPatternActivity extends AppCompatActivity {
 
     static final int REQUEST_FRONT_IMAGE_CAPTURE = 1;
     static final int REQUEST_BACK_IMAGE_CAPTURE = 2;
+    static boolean hasFrontImage = false;
+    static boolean hasBackImage = false;
 
     private ImageView frontPic;
 
@@ -55,14 +57,17 @@ public class AddPatternActivity extends AppCompatActivity {
 
         // set the camera picture target
         ImageView target = null;
-        if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE) {
-            target = (ImageView) findViewById(R.id.frontImage);
-        }
-        else if (requestCode == REQUEST_BACK_IMAGE_CAPTURE) {
-            target = (ImageView) findViewById(R.id.backImage);
-        }
-        // get the picture taken
+        // select the right ImageView to update, and log there is an image taken
         if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE) {
+                target = (ImageView) findViewById(R.id.frontImage);
+                hasFrontImage = true;
+            }
+            else if (requestCode == REQUEST_BACK_IMAGE_CAPTURE) {
+                target = (ImageView) findViewById(R.id.backImage);
+                hasBackImage = true;
+            }
+            // update UI
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             // This could throw a null object exception, but really only if an incorrect
