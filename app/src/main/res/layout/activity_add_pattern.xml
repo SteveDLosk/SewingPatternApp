@@ -9,7 +9,7 @@
     tools:context="com.weebly.stevelosk.sewingpatternapp.AddPatternActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/patternNumberEditText"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,26 +17,26 @@
         android:hint="@string/AddPattern_PatternNoHint"
         android:inputType="textVisiblePassword" />
 
-    <AutoCompleteTextView
-        android:id="@+id/brandAutoCompleteView"
+    <EditText
+        android:id="@+id/brandEditText"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:ems="10"
-        android:completionHint="brand" />
+        android:hint="brand"
+        android:inputType="textPersonName"/>
 
     <EditText
-        android:id="@+id/patternNumberEditText"
+        android:id="@+id/sizesEditText"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/AddPattern_SizesHint"
-        android:inputType="textPersonName" />
+        android:inputType="textVisiblePassword" />
 
     <EditText
-        android:id="@+id/sizesEditText"
+        android:id="@+id/contentsEditText"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
