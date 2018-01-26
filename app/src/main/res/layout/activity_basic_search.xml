@@ -9,9 +9,10 @@
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_margin="8dp"
-        android:hint="@string/BasicSearch_Hint" />
+        android:layout_marginTop="16dp"
+        android:hint="@string/BasicSearch_Hint"
+        android:inputType="textVisiblePassword" />
 
     <ImageView
         android:id="@+id/placeHolderImage"

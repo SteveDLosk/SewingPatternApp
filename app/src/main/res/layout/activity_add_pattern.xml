@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/AddPattern_PatternNoHint"
-        android:inputType="textPersonName" />
+        android:inputType="textVisiblePassword" />
 
     <AutoCompleteTextView
         android:id="@+id/brandAutoCompleteView"
