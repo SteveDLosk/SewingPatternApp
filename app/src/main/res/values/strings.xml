@@ -12,4 +12,5 @@
     <string name="AddPatern_BackImageAltContent">A picture of the back of the pattern</string>
     <string name="BasicSearch_Hint">search by pattern number&#8230; article type&#8230;</string>
     <string name="BasicSearch_placeHolderImageAlt">A thread spool image</string>
+    <string name="AddPattern_brandHint">brand</string>
 </resources>
