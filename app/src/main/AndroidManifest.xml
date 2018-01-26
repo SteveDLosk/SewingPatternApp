@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddPatternActivity"></activity>
+        <activity android:name=".AddPatternActivity" />
+        <activity android:name=".BasicSearchActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton topRightButton;
+    private ImageButton topLeftButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent addIntent = new Intent(getApplicationContext(), AddPatternActivity.class);
                 startActivity(addIntent);
+            }
+        });
+
+        topLeftButton = (ImageButton) findViewById(R.id.imgButtonTopLeft);
+        topLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(getApplicationContext(), BasicSearchActivity.class);
+                startActivity(searchIntent);
             }
         });
     }
