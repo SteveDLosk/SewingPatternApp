@@ -13,6 +13,7 @@ import android.widget.ImageView;
 public class AddPatternActivity extends AppCompatActivity {
 
     static final int REQUEST_FRONT_IMAGE_CAPTURE = 1;
+    static final int REQUEST_BACK_IMAGE_CAPTURE = 2;
 
     private ImageView frontPic;
 
@@ -26,6 +27,14 @@ public class AddPatternActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent(REQUEST_FRONT_IMAGE_CAPTURE);
+            }
+        });
+
+        ImageView backPic = (ImageView) findViewById(R.id.backImage);
+        backPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent(REQUEST_BACK_IMAGE_CAPTURE);
             }
         });
 
@@ -44,12 +53,22 @@ public class AddPatternActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                System.out.println("Got the pciture");
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                frontPic = (ImageView) findViewById(R.id.frontImage);
-                frontPic.setImageBitmap(imageBitmap);
-            }
+        // set the camera picture target
+        ImageView target = null;
+        if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE) {
+            target = (ImageView) findViewById(R.id.frontImage);
+        }
+        else if (requestCode == REQUEST_BACK_IMAGE_CAPTURE) {
+            target = (ImageView) findViewById(R.id.backImage);
+        }
+        // get the picture taken
+        if (resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            // This could throw a null object exception, but really only if an incorrect
+            // request code is set.
+            assert (requestCode == 1 || requestCode == 2);
+            target.setImageBitmap(imageBitmap);
+        }
     }
 }
