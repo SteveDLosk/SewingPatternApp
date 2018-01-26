@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">SewingPatternApp</string>
+    <string name="title_activity_add_pattern">AddPatternActivity</string>
+    <string name="addPaternActivityButton">Save</string>
+    <string name="AddPattern_NotesHint">add any notes here</string>
+    <string name="AddPattern_BackImageLabel">Back of pattern</string>
+    <string name="AddPattern_FontImageLabel">Front of pattern</string>
+    <string name="AddPattern_ContentHint">What items can you make with this pattern?</string>
+    <string name="AddPattern_SizesHint">sizes</string>
+    <string name="AddPattern_PatternNoHint">pattern number</string>
+    <string name="AddPatern_FrontImageAltContent">A picture of the front of the pattern</string>
+    <string name="AddPatern_BackImageAltContent">A picture of the back of the pattern</string>
 </resources>
