@@ -142,9 +142,13 @@ public class Pattern {
         try {
             int min = Integer.parseInt(sbFront.toString());
             int max = Integer.parseInt(sbBack.toString());
-            this.minNumericSize = min;
-            this.maxNumericSize = max;
-            return true;
+            // min should not be larger than max
+            if (min <= max) {
+                this.minNumericSize = min;
+                this.maxNumericSize = max;
+                return true;
+            }
+            return false;
         }
         catch (NumberFormatException e) {
             return false;
