@@ -19,20 +19,20 @@ public class PatternDBAdapter {
     private static final String PATTERN_TABLE = "PATTERN_TABLE";
     private static final int DATABASE_VERSION = 1;
     private final Context myContext;
-    public static String TAG = "SDL, PatternDBAdapter";
+    static String TAG = "SDL, PatternDBAdapter";
 
     private DatabaseHelper myDBHelper;
-    SQLiteDatabase db;
+    private SQLiteDatabase db;
 
-    public final static String KEY_ROWID = "_id";
-    public final static String BRAND = "brand";
-    public final static String PATTERN_NUMBER = "pattern_number";
-    public final static String SIZES = "sizes";
-    public final static String CONTENT = "content";
-    public final static String NOTES = "notes";
+    private final static String KEY_ROWID = "_id";
+    private final static String BRAND = "brand";
+    private final static String PATTERN_NUMBER = "pattern_number";
+    private final static String SIZES = "sizes";
+    private final static String CONTENT = "content";
+    private final static String NOTES = "notes";
     // TODO: Add BLOBs (pictures)
 
-    public static final String[] PATTERN_FIELDS = new String[] {
+    private static final String[] PATTERN_FIELDS = new String[] {
             KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES
     };
 
@@ -43,24 +43,24 @@ public class PatternDBAdapter {
             + SIZES + " text," + CONTENT + " text, " + NOTES + " text"
             + ");";
 
-    public PatternDBAdapter(Context context) {
+    PatternDBAdapter(Context context) {
         this.myContext = context;
     }
 
-    public PatternDBAdapter open() throws SQLException {
+    PatternDBAdapter open() throws SQLException {
         myDBHelper = new DatabaseHelper(myContext);
         db = myDBHelper.getWritableDatabase();
         return this;
     }
 
-    public void close() {
+    void close() {
         if (myDBHelper != null) {
             myDBHelper.close();
         }
     }
 
     // SQL DML methods
-    public long insertPattern(ContentValues values) {
+    long insertPattern(ContentValues values) {
         return db.insertWithOnConflict(PATTERN_TABLE, null,
                 values, SQLiteDatabase.CONFLICT_IGNORE);
     }
@@ -78,17 +78,17 @@ public class PatternDBAdapter {
 
     // SQL Query methods
 
-    public Cursor getAllPatterns() {
+    Cursor getAllPatterns() {
         return db.query(PATTERN_TABLE, PATTERN_FIELDS, null, null,
                 null, null, null);
     }
 
-    public Cursor getPatternByID(String[] id) {
+    Cursor getPatternByID(String[] id) {
         return db.query(PATTERN_TABLE, PATTERN_FIELDS, PATTERN_NUMBER + " =? ", id,
                 null, null, null);
     }
 
-    public static Pattern getPatternFromCursor(Cursor cursor) {
+    static Pattern getPatternFromCursor(Cursor cursor) {
         Pattern p = new Pattern();
         p.setPatternId(cursor.getInt(cursor.getColumnIndex(KEY_ROWID)));
         p.setBrand(cursor.getString(cursor.getColumnIndex(BRAND)));
@@ -120,7 +120,7 @@ public class PatternDBAdapter {
 
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVer, int newVer) {
-            /**
+            /*
              *  Destroys old table, and calls a new onCreate()
              */
 
