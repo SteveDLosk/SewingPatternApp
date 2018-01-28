@@ -25,11 +25,11 @@ public class PatternDBAdapter {
     private SQLiteDatabase db;
 
     private final static String KEY_ROWID = "_id";
-    private final static String BRAND = "brand";
-    private final static String PATTERN_NUMBER = "pattern_number";
-    private final static String SIZES = "sizes";
-    private final static String CONTENT = "content";
-    private final static String NOTES = "notes";
+    final static String BRAND = "brand";
+    final static String PATTERN_NUMBER = "pattern_number";
+    final static String SIZES = "sizes";
+    final static String CONTENT = "content";
+    final static String NOTES = "notes";
     // TODO: Add BLOBs (pictures)
 
     private static final String[] PATTERN_FIELDS = new String[] {
