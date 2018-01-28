@@ -84,7 +84,7 @@ public class PatternDBAdapter {
     }
 
     public Cursor getPatternByID(String[] id) {
-        return db.query(PATTERN_TABLE, PATTERN_FIELDS, PATTERN_NUMBER, id,
+        return db.query(PATTERN_TABLE, PATTERN_FIELDS, PATTERN_NUMBER + " =? ", id,
                 null, null, null);
     }
 
