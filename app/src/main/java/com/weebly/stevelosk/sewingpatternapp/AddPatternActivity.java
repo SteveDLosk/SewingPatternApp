@@ -1,5 +1,6 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
@@ -7,8 +8,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.sql.SQLException;
 
 public class AddPatternActivity extends AppCompatActivity {
 
@@ -18,6 +22,11 @@ public class AddPatternActivity extends AppCompatActivity {
     static boolean hasBackImage = false;
 
     private ImageView frontPic;
+    private EditText patternNumberET;
+    private EditText brandET;
+    private EditText sizesET;
+    private EditText contentsET;
+    private EditText notesET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +50,54 @@ public class AddPatternActivity extends AppCompatActivity {
         });
 
 
+        // register text areas for data collection
+        patternNumberET = (EditText) findViewById(R.id.patternNumberEditText);
+        brandET = (EditText) findViewById(R.id.brandEditText);
+        sizesET = (EditText) findViewById(R.id.sizesEditText);
+        contentsET = (EditText) findViewById(R.id.contentsEditText);
+        notesET = (EditText) findViewById(R.id.notesEditText);
+
+        Button saveButton = (Button) findViewById(R.id.confirmAddButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    addPatternToDatabase();
+                }
+                catch (SQLException e) {
+                    // Debugging
+                    // TODO: Handle this better
+                    notesET.setText(e.getMessage());
+                }
+            }
+        });
+
     }
 
+    private void addPatternToDatabase () throws SQLException {
+
+        // Open Database connection
+        PatternDBAdapter dbAdapter = new PatternDBAdapter(this);
+        dbAdapter.open();
+
+        // Collect user input from fields
+        String brand = brandET.getText().toString();
+        String patternNumber = patternNumberET.getText().toString();
+        String sizes = sizesET.getText().toString();
+        String contents = contentsET.getText().toString();
+        String notes = notesET.getText().toString();
+
+        // Put into Content Values
+        ContentValues values = new ContentValues();
+        values.put(PatternDBAdapter.BRAND, brand);
+        values.put(PatternDBAdapter.PATTERN_NUMBER, patternNumber);
+        values.put(PatternDBAdapter.SIZES, sizes);
+        values.put(PatternDBAdapter.CONTENT, contents);
+        values.put(PatternDBAdapter.NOTES, notes);
+        dbAdapter.insertPattern(values);
+
+        dbAdapter.close();
+    }
 
 
     private void dispatchTakePictureIntent(int id) {
