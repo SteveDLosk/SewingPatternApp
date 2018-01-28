@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import java.sql.SQLException;
+
 
 public class AddPatternActivity extends AppCompatActivity {
 
@@ -38,6 +38,7 @@ public class AddPatternActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent(REQUEST_FRONT_IMAGE_CAPTURE);
+
             }
         });
 
@@ -106,6 +107,7 @@ public class AddPatternActivity extends AppCompatActivity {
             startActivityForResult(takePictureIntent, id);
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
