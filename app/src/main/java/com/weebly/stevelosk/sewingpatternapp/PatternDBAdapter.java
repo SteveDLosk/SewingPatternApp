@@ -83,6 +83,23 @@ public class PatternDBAdapter {
                 null, null, null);
     }
 
+    public Cursor getPatternByID(String[] id) {
+        return db.query(PATTERN_TABLE, PATTERN_FIELDS, PATTERN_NUMBER, id,
+                null, null, null);
+    }
+
+    public static Pattern getPatternFromCursor(Cursor cursor) {
+        Pattern p = new Pattern();
+        p.setPatternId(cursor.getInt(cursor.getColumnIndex(KEY_ROWID)));
+        p.setBrand(cursor.getString(cursor.getColumnIndex(BRAND)));
+        p.setPatternNumber(cursor.getString(cursor.getColumnIndex(PATTERN_NUMBER)));
+        p.setSizes(cursor.getString(cursor.getColumnIndex(SIZES)));
+        p.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
+        p.setNotes(cursor.getString(cursor.getColumnIndex(NOTES)));
+        // TODO: get BLOBs
+        return p;
+    }
+
 
 
     public void upgrade(int version) throws SQLException {
