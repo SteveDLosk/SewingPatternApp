@@ -42,7 +42,11 @@ public class TestDatabaseActivity extends AppCompatActivity {
         for (Pattern p : patterns) {
             sb.append(p.getPatternId());
             sb.append(" ");
+            sb.append(p.getPatternNumber());
+            sb.append(" ");
             sb.append(p.getBrand());
+            sb.append(" ");
+            sb.append(p.getContent());
             sb.append("\n");
         }
         resultsTextView.setText(sb.toString());
