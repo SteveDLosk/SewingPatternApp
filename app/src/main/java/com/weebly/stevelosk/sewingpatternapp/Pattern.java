@@ -20,6 +20,24 @@ public class Pattern {
     // images, stored as file path Strings
     private String frontPicture;
     private String backPicture;
+    private byte[] frontImgBytes;
+    private byte[] backImgBytes;
+
+    public byte[] getBackImgBytes() {
+        return backImgBytes;
+    }
+
+    public void setBackImgBytes(byte[] backImgBytes) {
+        this.backImgBytes = backImgBytes;
+    }
+
+    public byte[] getFrontImgBytes() {
+        return frontImgBytes;
+    }
+
+    public void setFrontImgBytes(byte[] frontImgBytes) {
+        this.frontImgBytes = frontImgBytes;
+    }
 
     private String content;  // a list of tags based on article type (skirt, blouse, etc.)
     private String notes;

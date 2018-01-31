@@ -2,6 +2,7 @@ package com.weebly.stevelosk.sewingpatternapp;
 
 import android.content.Intent;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton topRightButton;
     private ImageButton topLeftButton;
+    private ImageButton bottomLeftButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent searchIntent = new Intent(getApplicationContext(), BasicSearchActivity.class);
                 startActivity(searchIntent);
+            }
+        });
+
+        bottomLeftButton = (ImageButton) findViewById(R.id.imgButtonBottomLeft);
+        bottomLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent testDBIntent = new Intent(getApplicationContext(), TestDatabaseActivity.class);
+                startActivity(testDBIntent);
             }
         });
     }
