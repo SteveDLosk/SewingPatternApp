@@ -6,8 +6,13 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.text.Selection;
 import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 /**
  * Created by steve on 1/27/2018.
@@ -30,17 +35,19 @@ public class PatternDBAdapter {
     final static String SIZES = "sizes";
     final static String CONTENT = "content";
     final static String NOTES = "notes";
-    // TODO: Add BLOBs (pictures)
+    final static String FRONT_IMAGE = "front_image";
+    final static String BACK_IMAGE = "back_image";
 
     private static final String[] PATTERN_FIELDS = new String[] {
-            KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES
+            KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES, FRONT_IMAGE, BACK_IMAGE
     };
 
     // SQL string to create the table
     private static final String CREATE_PATTERN_TABLE = "create table " + PATTERN_TABLE + "("
             + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + BRAND + " text not null," + PATTERN_NUMBER + " text,"
-            + SIZES + " text," + CONTENT + " text, " + NOTES + " text"
+            + SIZES + " text," + CONTENT + " text, " + NOTES + " text, "
+            + FRONT_IMAGE + " BLOB, " + BACK_IMAGE + " BLOB"
             + ");";
 
     PatternDBAdapter(Context context) {
@@ -100,7 +107,26 @@ public class PatternDBAdapter {
         return p;
     }
 
+    public static byte[] bitmapToByeArray (Bitmap bitmap ) {
 
+            int bufferSize = bitmap.getByteCount();
+
+            //allocate new instances which will hold bitmap
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            byte[] bytes = new byte[bufferSize];
+
+            //copy the bitmap's pixels into the specified buffer
+            bitmap.copyPixelsToBuffer(buffer);
+
+            //rewinds buffer (buffer position is set to zero and the mark is discarded)
+            buffer.rewind();
+
+            //transfer bytes from buffer into the given destination array
+            buffer.get(bytes);
+
+            //return bitmap's pixels
+            return bytes;
+        }
 
     public void upgrade(int version) throws SQLException {
         myDBHelper = new DatabaseHelper(myContext);

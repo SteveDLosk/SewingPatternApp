@@ -28,6 +28,9 @@ public class AddPatternActivity extends AppCompatActivity {
     private EditText contentsET;
     private EditText notesET;
 
+    private android.graphics.Bitmap frontImgBitmap = null;
+    private android.graphics.Bitmap backImgBitmap = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,27 +80,39 @@ public class AddPatternActivity extends AppCompatActivity {
 
     private void addPatternToDatabase () throws SQLException {
 
-        // Open Database connection
-        PatternDBAdapter dbAdapter = new PatternDBAdapter(this);
-        dbAdapter.open();
+        try {
+            // Open Database connection
+            PatternDBAdapter dbAdapter = new PatternDBAdapter(this);
+            dbAdapter.open();
 
-        // Collect user input from fields
-        String brand = brandET.getText().toString();
-        String patternNumber = patternNumberET.getText().toString();
-        String sizes = sizesET.getText().toString();
-        String contents = contentsET.getText().toString();
-        String notes = notesET.getText().toString();
+            // Collect user input from fields
+            String brand = brandET.getText().toString();
+            String patternNumber = patternNumberET.getText().toString();
+            String sizes = sizesET.getText().toString();
+            String contents = contentsET.getText().toString();
+            String notes = notesET.getText().toString();
 
-        // Put into Content Values
-        ContentValues values = new ContentValues();
-        values.put(PatternDBAdapter.BRAND, brand);
-        values.put(PatternDBAdapter.PATTERN_NUMBER, patternNumber);
-        values.put(PatternDBAdapter.SIZES, sizes);
-        values.put(PatternDBAdapter.CONTENT, contents);
-        values.put(PatternDBAdapter.NOTES, notes);
-        dbAdapter.insertPattern(values);
+            // Put into Content Values
+            ContentValues values = new ContentValues();
+            values.put(PatternDBAdapter.BRAND, brand);
+            values.put(PatternDBAdapter.PATTERN_NUMBER, patternNumber);
+            values.put(PatternDBAdapter.SIZES, sizes);
+            values.put(PatternDBAdapter.CONTENT, contents);
+            values.put(PatternDBAdapter.NOTES, notes);
 
-        dbAdapter.close();
+            // BLOBS
+            values.put(PatternDBAdapter.FRONT_IMAGE,
+                    PatternDBAdapter.bitmapToByeArray(frontImgBitmap));
+            values.put(PatternDBAdapter.BACK_IMAGE,
+                    PatternDBAdapter.bitmapToByeArray(backImgBitmap));
+
+            // run the insert DML
+            dbAdapter.insertPattern(values);
+            dbAdapter.close();
+        }
+        catch (Exception e) {
+            notesET.setText(e.getMessage());
+        }
     }
 
 
@@ -114,23 +129,28 @@ public class AddPatternActivity extends AppCompatActivity {
 
         // set the camera picture target
         ImageView target = null;
-        // select the right ImageView to update, and log there is an image taken
+        // get the image as a Bitmap
+        Bundle extras = data.getExtras();
+        Bitmap image = (Bitmap) extras.get("data");
+        // select the right ImageView to update and log there is an image taken
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE) {
                 target = (ImageView) findViewById(R.id.frontImage);
                 hasFrontImage = true;
+                // reference for saving to the database
+                frontImgBitmap = image;
             }
             else if (requestCode == REQUEST_BACK_IMAGE_CAPTURE) {
                 target = (ImageView) findViewById(R.id.backImage);
                 hasBackImage = true;
+                backImgBitmap = image;
             }
             // update UI
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
             // This could throw a null object exception, but really only if an incorrect
             // request code is set.
             assert (requestCode == 1 || requestCode == 2);
-            target.setImageBitmap(imageBitmap);
+            target.setImageBitmap(image);
+
         }
     }
 }
