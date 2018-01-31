@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
 
 
@@ -22,6 +24,7 @@ public class AddPatternActivity extends AppCompatActivity {
     static boolean hasBackImage = false;
 
     private ImageView frontPic;
+    private ImageView backPic;
     private EditText patternNumberET;
     private EditText brandET;
     private EditText sizesET;
@@ -101,10 +104,14 @@ public class AddPatternActivity extends AppCompatActivity {
             values.put(PatternDBAdapter.NOTES, notes);
 
             // BLOBS
-            values.put(PatternDBAdapter.FRONT_IMAGE,
-                    PatternDBAdapter.bitmapToByeArray(frontImgBitmap));
-            values.put(PatternDBAdapter.BACK_IMAGE,
-                    PatternDBAdapter.bitmapToByeArray(backImgBitmap));
+            if (frontImgBitmap != null) {
+                values.put(PatternDBAdapter.FRONT_IMAGE,
+                        PatternDBAdapter.bitmapToByteArray2(frontImgBitmap));
+            }
+            if (backImgBitmap != null) {
+                values.put(PatternDBAdapter.BACK_IMAGE,
+                        PatternDBAdapter.bitmapToByteArray2(backImgBitmap));
+            }
 
             // run the insert DML
             dbAdapter.insertPattern(values);
@@ -114,7 +121,6 @@ public class AddPatternActivity extends AppCompatActivity {
             notesET.setText(e.getMessage());
         }
     }
-
 
     private void dispatchTakePictureIntent(int id) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -128,12 +134,15 @@ public class AddPatternActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // set the camera picture target
+        frontPic = (ImageView) findViewById(R.id.frontImage);
+        backPic = (ImageView) findViewById(R.id.backImage);
         ImageView target = null;
         // get the image as a Bitmap
         Bundle extras = data.getExtras();
-        Bitmap image = (Bitmap) extras.get("data");
+
         // select the right ImageView to update and log there is an image taken
         if (resultCode == RESULT_OK) {
+            Bitmap image = (Bitmap) extras.get("data");
             if (requestCode == REQUEST_FRONT_IMAGE_CAPTURE) {
                 target = (ImageView) findViewById(R.id.frontImage);
                 hasFrontImage = true;

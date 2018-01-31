@@ -103,10 +103,48 @@ public class PatternDBAdapter {
         p.setSizes(cursor.getString(cursor.getColumnIndex(SIZES)));
         p.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
         p.setNotes(cursor.getString(cursor.getColumnIndex(NOTES)));
-        // TODO: get BLOBs
+        p.setFrontImgBytes(cursor.getBlob(cursor.getColumnIndex(FRONT_IMAGE)));
+        p.setBackImgBytes(cursor.getBlob(cursor.getColumnIndex(BACK_IMAGE)));
+
         return p;
     }
 
+    public static byte[] bitmapToByteArray2 (Bitmap bitmap) {
+
+        // from  https://android--code.blogspot.com/2015/09/android-how-to-convert-bitmap-to-byte.html
+        // Initializing a new ByteArrayOutputStream
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                    /*
+                        public boolean compress (Bitmap.CompressFormat format, int quality, OutputStream stream)
+                            Write a compressed version of the bitmap to the specified outputstream.
+                            If this returns true, the bitmap can be reconstructed by passing a
+                            corresponding inputstream to BitmapFactory.decodeStream().
+
+                            Note: not all Formats support all bitmap configs directly, so it is
+                            possible that the returned bitmap from BitmapFactory could be in
+                            a different bitdepth, and/or may have lost per-pixel alpha
+                            (e.g. JPEG only supports opaque pixels).
+
+                            Parameters
+                            format : The format of the compressed image
+                            quality : Hint to the compressor, 0-100. 0 meaning compress for small
+                                size, 100 meaning compress for max quality. Some formats,
+                                like PNG which is lossless, will ignore the quality setting
+                            stream : The outputstream to write the compressed data.
+
+                            Returns
+                                true if successfully compressed to the specified stream.
+                    */
+
+        // Compress the bitmap to jpeg format and 50% image quality
+        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+
+        // Create a byte array from ByteArrayOutputStream
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+
+    }
     public static byte[] bitmapToByeArray (Bitmap bitmap ) {
 
             int bufferSize = bitmap.getByteCount();

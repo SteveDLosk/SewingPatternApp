@@ -1,14 +1,18 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class BasicSearchActivity extends AppCompatActivity {
     private Button searchButon;
     private TextView resultsTextView;
     private List<Pattern> patterns = new ArrayList<>();
+    private ImageView placeHolderImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,8 @@ public class BasicSearchActivity extends AppCompatActivity {
 
         searchEditText = (EditText) findViewById(R.id.searchEditText);
         resultsTextView = (TextView) findViewById(R.id.searchActivity_resultsTextView);
+        placeHolderImage = (ImageView) findViewById(R.id.placeHolderImage);
+
         searchButon = (Button) findViewById(R.id.searchActivitySearchButton);
         searchButon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +61,20 @@ public class BasicSearchActivity extends AppCompatActivity {
                         sb.append(" ");
                         sb.append(p.getContent());
                         sb.append("\n");
+
+
+                        Bitmap image = BitmapFactory.decodeByteArray(p.getFrontImgBytes(), 0,
+                                p.getFrontImgBytes().length);
+                        placeHolderImage.setImageBitmap(image);
+                        if (image != null ) {
+                            sb.append("image is not null1");
+                        }
+                        else {
+                            sb.append("image is null");
+                        }
                     }
                     resultsTextView.setText(sb.toString());
+
                     db.close();
                 }
 
