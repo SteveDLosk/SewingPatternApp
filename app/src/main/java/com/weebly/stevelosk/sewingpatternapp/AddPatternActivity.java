@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
@@ -70,11 +71,15 @@ public class AddPatternActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     addPatternToDatabase();
+                    try {
+                        onSuccessfulAdd();
+                    }
+                    catch (Exception e) {
+                        toastException(e);
+                    }
                 }
                 catch (SQLException e) {
-                    // Debugging
-                    // TODO: Handle this better
-                    notesET.setText(e.getMessage());
+                    toastException(e);
                 }
             }
         });
@@ -83,7 +88,6 @@ public class AddPatternActivity extends AppCompatActivity {
 
     private void addPatternToDatabase () throws SQLException {
 
-        try {
             // Open Database connection
             PatternDBAdapter dbAdapter = new PatternDBAdapter(this);
             dbAdapter.open();
@@ -116,10 +120,6 @@ public class AddPatternActivity extends AppCompatActivity {
             // run the insert DML
             dbAdapter.insertPattern(values);
             dbAdapter.close();
-        }
-        catch (Exception e) {
-            notesET.setText(e.getMessage());
-        }
     }
 
     private void dispatchTakePictureIntent(int id) {
@@ -134,8 +134,6 @@ public class AddPatternActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // set the camera picture target
-        frontPic = (ImageView) findViewById(R.id.frontImage);
-        backPic = (ImageView) findViewById(R.id.backImage);
         ImageView target = null;
         // get the image as a Bitmap
         Bundle extras = data.getExtras();
@@ -161,5 +159,10 @@ public class AddPatternActivity extends AppCompatActivity {
             target.setImageBitmap(image);
 
         }
+    }
+
+    private void toastException (Exception e) {
+        Toast.makeText(getApplicationContext(), e.getMessage(),
+                Toast.LENGTH_LONG).show();
     }
 }
