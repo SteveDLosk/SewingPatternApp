@@ -10,7 +10,7 @@
     <string name="AddPattern_PatternNoHint">pattern number</string>
     <string name="AddPatern_FrontImageAltContent">A picture of the front of the pattern</string>
     <string name="AddPatern_BackImageAltContent">A picture of the back of the pattern</string>
-    <string name="AddPatternSuccess">Pattern added</string>
+    <string name="AddPatternSuccess">pattern added successfully</string>
     <string name="BasicSearch_Hint">search by pattern number&#8230; article type&#8230;</string>
     <string name="BasicSearch_placeHolderImageAlt">A thread spool image</string>
     <string name="AddPattern_brandHint">brand</string>

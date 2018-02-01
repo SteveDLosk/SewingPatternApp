@@ -71,12 +71,7 @@ public class AddPatternActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     addPatternToDatabase();
-                    try {
-                        onSuccessfulAdd();
-                    }
-                    catch (Exception e) {
-                        toastException(e);
-                    }
+                    onSuccessfulAdd();
                 }
                 catch (SQLException e) {
                     toastException(e);
@@ -164,5 +159,27 @@ public class AddPatternActivity extends AppCompatActivity {
     private void toastException (Exception e) {
         Toast.makeText(getApplicationContext(), e.getMessage(),
                 Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessfulAdd () {
+        /*
+        Provides confirmation to user the data is saved, and clears text fields
+        and image holders for a new pattern.
+         */
+        Toast.makeText(getApplicationContext(), R.string.AddPatternSuccess,
+                Toast.LENGTH_SHORT).show();
+
+        // clear all text fields
+        patternNumberET.setText("");
+        brandET.setText("");
+        sizesET.setText("");
+        contentsET.setText("");
+        notesET.setText("");
+
+        // reset camera images
+        frontPic = (ImageView) findViewById(R.id.frontImage);
+        backPic = (ImageView) findViewById(R.id.backImage);
+        frontPic.setImageResource(R.drawable.photo_icon);
+        backPic.setImageResource(R.drawable.photo_icon);
     }
 }
