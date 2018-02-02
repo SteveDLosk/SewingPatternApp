@@ -22,6 +22,7 @@
 
     <ListView
         android:id="@+id/basicSearch_ListView"
+        android:layout_below="@id/searchActivitySearchButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,7 +36,7 @@
         android:id="@+id/placeHolderImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchActivity_resultsTextView"
+        android:layout_below="@id/basicSearch_ListView"
         android:layout_margin="8dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/BasicSearch_placeHolderImageAlt"
