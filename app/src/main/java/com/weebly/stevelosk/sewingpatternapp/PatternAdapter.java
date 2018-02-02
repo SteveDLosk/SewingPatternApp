@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 public class PatternAdapter extends BaseAdapter {
 
-    Context myContext;
-    ArrayList<Pattern> myPatterns;
-    LayoutInflater myInflater;
+    private Context myContext;
+    private ArrayList<Pattern> myPatterns;
+    private LayoutInflater myInflater;
 
-    public PatternAdapter(Context context, ArrayList<Pattern> patterns) {
+    PatternAdapter(Context context, ArrayList<Pattern> patterns) {
         myContext = context;
         myPatterns = patterns;
         myInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,10 +53,9 @@ public class PatternAdapter extends BaseAdapter {
             convertView = myInflater.inflate(R.layout.pattern_view_item, null);
             viewHolder = new MyViewHolder();
             // Get view components
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.thumbNailView);
-            viewHolder.brandTextView = (TextView) convertView.findViewById(R.id.brandLabel);
-            viewHolder.patternNumberTextView = (TextView)
-                    convertView.findViewById(R.id.patternNumberLabel);
+            viewHolder.imageView = convertView.findViewById(R.id.thumbNailView);
+            viewHolder.brandTextView = convertView.findViewById(R.id.brandLabel);
+            viewHolder.patternNumberTextView = convertView.findViewById(R.id.patternNumberLabel);
 
             convertView.setTag(viewHolder);
         }
@@ -70,16 +69,18 @@ public class PatternAdapter extends BaseAdapter {
         viewHolder.patternNumberTextView.setText(p.getPatternNumber());
 
         // Image
-        Bitmap image = BitmapFactory.decodeByteArray(p.getFrontImgBytes(), 0,
-                p.getFrontImgBytes().length);
-        viewHolder.imageView.setImageBitmap(image);
+        if (p.getFrontImgBytes() != null) {
+            Bitmap image = BitmapFactory.decodeByteArray(p.getFrontImgBytes(), 0,
+                    p.getFrontImgBytes().length);
+            viewHolder.imageView.setImageBitmap(image);
+        }
 
         return convertView;
     }
 }
 
 class MyViewHolder {
-    public ImageView imageView;
-    public TextView brandTextView;
-    public TextView patternNumberTextView;
+    ImageView imageView;
+    TextView brandTextView;
+    TextView patternNumberTextView;
 }
