@@ -14,4 +14,5 @@
     <string name="BasicSearch_Hint">search by pattern number&#8230; article type&#8230;</string>
     <string name="BasicSearch_placeHolderImageAlt">A thread spool image</string>
     <string name="AddPattern_brandHint">brand</string>
+    <string name="pattern_view_item_contentDescription">a thumbnail view of the front of the pattern</string>
 </resources>
