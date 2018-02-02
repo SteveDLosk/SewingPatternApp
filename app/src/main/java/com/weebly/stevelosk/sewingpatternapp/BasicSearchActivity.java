@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
@@ -22,8 +23,9 @@ public class BasicSearchActivity extends AppCompatActivity {
     private EditText searchEditText;
     private Button searchButon;
     private TextView resultsTextView;
-    private List<Pattern> patterns = new ArrayList<>();
+    private ArrayList<Pattern> patterns = new ArrayList<>();
     private ImageView placeHolderImage;
+    private ListView resultsListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,11 @@ public class BasicSearchActivity extends AppCompatActivity {
         searchEditText = (EditText) findViewById(R.id.searchEditText);
         resultsTextView = (TextView) findViewById(R.id.searchActivity_resultsTextView);
         placeHolderImage = (ImageView) findViewById(R.id.placeHolderImage);
+
+        // ListView
+        resultsListView = (ListView) findViewById(R.id.basicSearch_ListView);
+        PatternAdapter pa = new PatternAdapter(this, patterns);
+        resultsListView.setAdapter(pa);
 
         searchButon = (Button) findViewById(R.id.searchActivitySearchButton);
         searchButon.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +58,7 @@ public class BasicSearchActivity extends AppCompatActivity {
                         Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
                         patterns.add(p);
                     }
+                    /*
                     StringBuilder sb = new StringBuilder();
                     for (Pattern p : patterns) {
                         sb.append(p.getPatternId());
@@ -74,7 +82,7 @@ public class BasicSearchActivity extends AppCompatActivity {
                         }
                     }
                     resultsTextView.setText(sb.toString());
-
+*/
                     db.close();
                 }
 
