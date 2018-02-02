@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".AddPatternActivity" />
         <activity android:name=".BasicSearchActivity" />
-        <activity android:name=".TestDatabaseActivity"></activity>
+        <activity android:name=".TestDatabaseActivity" />
+        <activity android:name=".BrowseActivity"></activity>
     </application>
 
 </manifest>

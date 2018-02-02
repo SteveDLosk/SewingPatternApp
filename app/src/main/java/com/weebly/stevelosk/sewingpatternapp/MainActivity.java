@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         bottomLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent testDBIntent = new Intent(getApplicationContext(), TestDatabaseActivity.class);
+                Intent testDBIntent = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(testDBIntent);
             }
         });
