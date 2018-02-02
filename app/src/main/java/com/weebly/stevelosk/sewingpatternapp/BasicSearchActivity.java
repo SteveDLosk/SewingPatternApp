@@ -47,6 +47,8 @@ public class BasicSearchActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 try {
+                    // remove prior search results
+                    patterns.clear();
                     PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
                     db.open();
 
@@ -58,31 +60,7 @@ public class BasicSearchActivity extends AppCompatActivity {
                         Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
                         patterns.add(p);
                     }
-                    /*
-                    StringBuilder sb = new StringBuilder();
-                    for (Pattern p : patterns) {
-                        sb.append(p.getPatternId());
-                        sb.append(" ");
-                        sb.append(p.getPatternNumber());
-                        sb.append(" ");
-                        sb.append(p.getBrand());
-                        sb.append(" ");
-                        sb.append(p.getContent());
-                        sb.append("\n");
 
-
-                        Bitmap image = BitmapFactory.decodeByteArray(p.getFrontImgBytes(), 0,
-                                p.getFrontImgBytes().length);
-                        placeHolderImage.setImageBitmap(image);
-                        if (image != null ) {
-                            sb.append("image is not null1");
-                        }
-                        else {
-                            sb.append("image is null");
-                        }
-                    }
-                    resultsTextView.setText(sb.toString());
-*/
                     db.close();
                 }
 
