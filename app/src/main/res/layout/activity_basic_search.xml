@@ -14,22 +14,17 @@
         android:hint="@string/BasicSearch_Hint"
         android:inputType="textVisiblePassword" />
 
-    <Button
-        android:id="@+id/searchActivitySearchButton"
-        android:layout_below="@id/searchEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/basicSearch_ListView"
-        android:layout_below="@id/searchActivitySearchButton"
+        android:layout_below="@id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </ListView>
     <TextView
         android:id="@+id/searchActivity_resultsTextView"
-        android:layout_below="@id/searchActivitySearchButton"
+        android:layout_below="@id/searchEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ImageView

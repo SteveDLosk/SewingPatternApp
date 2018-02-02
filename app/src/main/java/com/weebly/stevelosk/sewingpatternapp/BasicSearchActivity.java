@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +18,21 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BasicSearchActivity extends AppCompatActivity {
 
     private String searchString = "";
     private EditText searchEditText;
-    private Button searchButon;
     private TextView resultsTextView;
     private ArrayList<Pattern> patterns = new ArrayList<>();
     private ImageView placeHolderImage;
     private ListView resultsListView;
+
+    // a Timer to wait between text changes before firing a search event
+    private Timer textChangedTimer;
+    private int TIMER_DELAY = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,34 +48,53 @@ public class BasicSearchActivity extends AppCompatActivity {
         PatternAdapter pa = new PatternAdapter(this, patterns);
         resultsListView.setAdapter(pa);
 
-        searchButon = (Button) findViewById(R.id.searchActivitySearchButton);
-        searchButon.setOnClickListener(new View.OnClickListener() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                if(textChangedTimer != null)
+                    textChangedTimer.cancel();
+            }
+            @Override
+            public void afterTextChanged(final Editable s) {
+                //avoid triggering event when text is too short
 
-                try {
-                    // remove prior search results
-                    patterns.clear();
-                    PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
-                    db.open();
+                    textChangedTimer = new Timer();
+                    textChangedTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            search();
+                        }
 
-                    String[] predicate = new String[1];
-                    predicate[0] = searchEditText.getText().toString();
-                    Cursor cursor = db.getPatternByID(predicate);
-
-                    while (cursor.moveToNext()) {
-                        Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
-                        patterns.add(p);
-                    }
-
-                    db.close();
+                    }, TIMER_DELAY);
                 }
 
-            catch(Exception e) {
-                resultsTextView.setText(e.getMessage());
+        });
+    }
+
+    private void search() {
+        try {
+            // remove prior search results
+            patterns.clear();
+            PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
+            db.open();
+
+            String[] predicate = new String[1];
+            predicate[0] = searchEditText.getText().toString();
+            Cursor cursor = db.getPatternByID(predicate);
+
+            while (cursor.moveToNext()) {
+                Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
+                patterns.add(p);
             }
+
+            db.close();
         }
 
-        });
+        catch(Exception e) {
+            resultsTextView.setText(e.getMessage());
+        }
     }
 }
