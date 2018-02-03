@@ -48,6 +48,7 @@ public class BasicSearchActivity extends AppCompatActivity {
         PatternAdapter pa = new PatternAdapter(this, patterns);
         resultsListView.setAdapter(pa);
 
+        // TODO: use Handler instead?
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
