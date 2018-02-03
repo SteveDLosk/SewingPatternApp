@@ -1,8 +1,12 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +28,17 @@ public class BrowseActivity extends AppCompatActivity {
         PatternAdapter pa = new PatternAdapter(this, patterns);
         listView.setAdapter(pa);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Pattern p = (Pattern) patterns.get(i);
+
+                Intent examineIntent = new Intent(getApplicationContext(),
+                        ExaminePatternActivity.class);
+                examineIntent.putExtra("PASSED_PATTERN_INSTANCE", p);
+                startActivity(examineIntent);
+            }
+        });
 
 
     }

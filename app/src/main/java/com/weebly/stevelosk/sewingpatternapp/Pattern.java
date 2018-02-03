@@ -1,10 +1,14 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by steve on 1/25/2018.  Data model for patterns in the database
  */
 
-public class Pattern {
+public class Pattern implements Serializable{
 
     private int patternId;  // a unique id for each instance, assigned automatically on instantiation
     private String brand;
