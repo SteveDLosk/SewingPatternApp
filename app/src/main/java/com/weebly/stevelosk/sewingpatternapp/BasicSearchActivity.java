@@ -1,5 +1,6 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +49,18 @@ public class BasicSearchActivity extends AppCompatActivity {
         resultsListView = (ListView) findViewById(R.id.basicSearch_ListView);
         PatternAdapter pa = new PatternAdapter(this, patterns);
         resultsListView.setAdapter(pa);
+
+        resultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Pattern p = patterns.get(i);
+
+                Intent examineIntent = new Intent(getApplicationContext(),
+                        ExaminePatternActivity.class);
+                examineIntent.putExtra("PASSED_PATTERN_INSTANCE", p);
+                startActivity(examineIntent);
+            }
+        });
 
         // TODO: use Handler instead?
         searchEditText.addTextChangedListener(new TextWatcher() {
