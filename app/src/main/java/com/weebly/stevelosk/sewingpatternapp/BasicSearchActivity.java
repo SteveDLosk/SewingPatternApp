@@ -196,6 +196,15 @@ public class BasicSearchActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.database_error,
                         Toast.LENGTH_LONG).show();
             }
+
+            // Make sure AsyncTask dies
+            try {
+                this.finalize();
+
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
         }
     }
 }
