@@ -15,4 +15,6 @@
     <string name="BasicSearch_placeHolderImageAlt">A thread spool image</string>
     <string name="AddPattern_brandHint">brand</string>
     <string name="pattern_view_item_contentDescription">a thumbnail view of the front of the pattern</string>
+    <string name="noPatternsFound">No matching patterns found</string>
+    <string name="database_error">Something went wrong</string>
 </resources>
