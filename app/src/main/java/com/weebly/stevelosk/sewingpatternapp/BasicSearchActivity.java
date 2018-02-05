@@ -38,11 +38,14 @@ public class BasicSearchActivity extends AppCompatActivity {
     private ImageView placeHolderImage;
     private ListView resultsListView;
 
+
     // a Timer to wait between text changes before firing a search event
     private Timer textChangedTimer;
-    private int TIMER_DELAY = 50;
+    protected int TIMER_DELAY = 100;
 
     private PatternAdapter pa = null;
+    private PatternDBAdapter db = null;
+    private AsyncSearchTask searchTask = null;
 
     private final String TAG = "SDL BasicSearchActivity";
 
@@ -50,6 +53,9 @@ public class BasicSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_search);
+        // open database onCreate
+        db = new PatternDBAdapter(this);
+        db.open();
 
         searchEditText = (EditText) findViewById(R.id.searchEditText);
         resultsTextView = (TextView) findViewById(R.id.searchActivity_resultsTextView);
@@ -83,70 +89,56 @@ public class BasicSearchActivity extends AppCompatActivity {
             }
         });
 
-        /*
+
         // TODO: use Handler instead?
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(final CharSequence s, int start, int before, int count) {
-                if(textChangedTimer != null)
+                if (textChangedTimer != null)
                     textChangedTimer.cancel();
             }
+
             @Override
             public void afterTextChanged(final Editable s) {
-                //avoid triggering event when text is too short
+                //avoid triggering event when time is too short
 
-                    textChangedTimer = new Timer();
-                    textChangedTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            search();
+                textChangedTimer = new Timer();
+                textChangedTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (searchTask != null) {
+                            // cancel previously running search, a search might have started
+                            // before the user was done entering text
+                            // could make a difference for a large database
+                            searchTask.cancel(true);
                         }
+                        searchTask = new AsyncSearchTask();
+                        Object[] params = {getApplicationContext(),
+                                searchEditText.getText().toString(), patterns};
+                        searchTask.execute(params);
 
-                    }, TIMER_DELAY);
-                }
+                    }
+                }, TIMER_DELAY);
 
+            }
         });
     }
 
-    private void search() {
-        try {
-            // remove prior search results
-            Object o0 = getApplicationContext();
-            Object o1 = searchEditText.getText().toString();
-            Object o2 = patterns;
-            patterns.clear();
-            PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
-            db.open();
 
-            String[] predicate = new String[1];
-            predicate[0] = searchEditText.getText().toString();
-            Cursor cursor = db.getPatternByID(predicate);
+    class AsyncSearchTask extends AsyncTask<Object, Void, Integer> {
 
-            while (cursor.moveToNext()) {
-                Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
-                patterns.add(p);
-            }
+        private static final int ASYNC_TASK_CANCELLED = -1;
+        private static final int ASYNC_TASK_COMPLETED = 0;
 
-            db.close();
-        }
-
-        catch(Exception e) {
-            resultsTextView.setText(e.getMessage());
-        }
-    }
-    */
-    }
-
-     class AsyncSearchTask extends AsyncTask<Object, Void, Integer> {
         @Override
         protected Integer doInBackground(Object... objects) {
 
             // create database connection
             Context ctx = (Context) objects[0];
-            PatternDBAdapter db = new PatternDBAdapter(ctx);
 
             // get query content and result set target from packaged objects
             String searchStr = (String) objects[1];
@@ -157,42 +149,41 @@ public class BasicSearchActivity extends AppCompatActivity {
                 // clear the old result list
                 patterns.clear();
 
-                // open the database
-                db.open();
-
                 // query
                 String[] predicate = new String[1];
                 predicate[0] = searchStr;
                 Cursor cursor = db.getPatternByID(predicate);
+                if (this.isCancelled()) {
+                    return ASYNC_TASK_CANCELLED;
+                }
 
                 // populate the results from the query result set
                 while (cursor.moveToNext()) {
                     Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
                     patterns.add(p);
+                    if (this.isCancelled()) {
+                        return ASYNC_TASK_CANCELLED;
+                    }
                 }
 
-                return 0;
+                return ASYNC_TASK_COMPLETED;
             } catch (SQLException e) {
                 Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
 
                 return 1;
-            } finally {
-                db.close();
             }
-
         }
 
         @Override
         protected void onPostExecute(Integer result) {
 
-            if (result == 0) {
+            if (result == ASYNC_TASK_COMPLETED) {
                 pa.notifyDataSetChanged();
-                if (patterns.size() == 0) {
+               /* if (patterns.size() == 0) {
                     Toast.makeText(getApplicationContext(), R.string.noPatternsFound,
                             Toast.LENGTH_SHORT).show();
-                }
-            }
-            else {
+                } */
+            } else if (result > ASYNC_TASK_COMPLETED) {
                 Toast.makeText(getApplicationContext(), R.string.database_error,
                         Toast.LENGTH_LONG).show();
             }
@@ -206,5 +197,16 @@ public class BasicSearchActivity extends AppCompatActivity {
             }
 
         }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }
