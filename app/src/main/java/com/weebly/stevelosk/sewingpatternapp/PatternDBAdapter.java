@@ -95,6 +95,12 @@ public class PatternDBAdapter {
                 null, null, null);
     }
 
+    Cursor getPatternByLikeID(String[] id) {
+        return db.query(PATTERN_TABLE, PATTERN_FIELDS, PATTERN_NUMBER + " like? ", id,
+                null, null, null);
+    }
+
+
     static Pattern getPatternFromCursor(Cursor cursor) {
         Pattern p = new Pattern();
         p.setPatternId(cursor.getInt(cursor.getColumnIndex(KEY_ROWID)));

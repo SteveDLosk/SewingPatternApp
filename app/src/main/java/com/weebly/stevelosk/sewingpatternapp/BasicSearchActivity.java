@@ -151,8 +151,9 @@ public class BasicSearchActivity extends AppCompatActivity {
 
                 // query
                 String[] predicate = new String[1];
-                predicate[0] = searchStr;
-                Cursor cursor = db.getPatternByID(predicate);
+                // surround search string with "%" so partial matches can be found
+                predicate[0] = "%" + searchStr + "%";
+                Cursor cursor = db.getPatternByLikeID(predicate);
                 if (this.isCancelled()) {
                     return ASYNC_TASK_CANCELLED;
                 }
