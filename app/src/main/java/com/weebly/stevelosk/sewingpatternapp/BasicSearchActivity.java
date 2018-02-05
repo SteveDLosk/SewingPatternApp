@@ -78,17 +78,6 @@ public class BasicSearchActivity extends AppCompatActivity {
             }
         });
 
-        placeHolderImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AsyncTask searchTask = new AsyncSearchTask();
-                Object[] params = {getApplicationContext(),
-                        searchEditText.getText().toString(), patterns, db, pa};
-                searchTask.execute(params);
-
-            }
-        });
-
 
         // TODO: use Handler instead?
         searchEditText.addTextChangedListener(new TextWatcher() {
