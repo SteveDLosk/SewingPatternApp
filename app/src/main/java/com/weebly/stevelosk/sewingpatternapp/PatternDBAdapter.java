@@ -100,6 +100,25 @@ public class PatternDBAdapter {
                 null, null, null);
     }
 
+    Cursor getPatternByLikeContent (String[] content) {
+        return db.query(PATTERN_TABLE, PATTERN_FIELDS, CONTENT + " like?", content,
+                null, null, null);
+    }
+
+    Cursor getPatternBy_ID_OR_Content (String[] str) {
+        // build predicate
+        StringBuilder whereClause = new StringBuilder();
+        whereClause.append(PATTERN_NUMBER);
+        whereClause.append(" like ? ");
+        whereClause.append(" OR ");
+        whereClause.append(CONTENT);
+        whereClause.append(" like ? ");
+        String where = whereClause.toString();
+        // run query
+        return db.query(PATTERN_TABLE, PATTERN_FIELDS, where, str,
+                null, null, null);
+    }
+
 
     static Pattern getPatternFromCursor(Cursor cursor) {
         Pattern p = new Pattern();

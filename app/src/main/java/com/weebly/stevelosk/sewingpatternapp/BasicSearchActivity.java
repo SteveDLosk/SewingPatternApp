@@ -150,10 +150,11 @@ public class BasicSearchActivity extends AppCompatActivity {
                 patterns.clear();
 
                 // query
-                String[] predicate = new String[1];
+                String[] predicate = new String[2];
                 // surround search string with "%" so partial matches can be found
                 predicate[0] = "%" + searchStr + "%";
-                Cursor cursor = db.getPatternByLikeID(predicate);
+                predicate[1] = "%" + searchStr + "%";
+                Cursor cursor = db.getPatternBy_ID_OR_Content(predicate);
                 if (this.isCancelled()) {
                     return ASYNC_TASK_CANCELLED;
                 }
