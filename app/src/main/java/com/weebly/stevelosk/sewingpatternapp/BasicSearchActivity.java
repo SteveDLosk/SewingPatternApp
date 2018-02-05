@@ -116,10 +116,15 @@ public class BasicSearchActivity extends AppCompatActivity {
                             // could make a difference for a large database
                             searchTask.cancel(true);
                         }
-                        searchTask = new AsyncSearchTask();
-                        Object[] params = {getApplicationContext(),
-                                searchEditText.getText().toString(), patterns, db, pa};
-                        searchTask.execute(params);
+                        try {
+                            searchTask = new AsyncSearchTask();
+                            Object[] params = {searchEditText.getText().toString(),
+                                    patterns, db, pa};
+                            searchTask.execute(params);
+                        }
+                        catch (SQLException e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
 
                     }
                 }, TIMER_DELAY);

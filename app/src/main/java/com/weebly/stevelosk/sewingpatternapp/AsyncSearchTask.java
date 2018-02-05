@@ -13,30 +13,27 @@ import java.util.ArrayList;
  * Created by steve on 2/4/2018.
  */
 
-class AsyncSearchTask extends AsyncTask<Object, Void, Integer> {
+class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
 
     // Result flags.  Canceled, completed, or any error conditions (> 0)
     private static final int ASYNC_TASK_CANCELLED = -1;
     private static final int ASYNC_TASK_COMPLETED = 0;
 
     // The passed in objects, in paramater order:
-    // TODO: This field leaks a context object
-    Context ctx = null;
-    String searchStr = "";
-    ArrayList<Pattern> patterns = null;
-    PatternDBAdapter db = null;
-    PatternAdapter pa = null;
+    private String searchStr = "";
+    private ArrayList<Pattern> patterns = null;
+    private PatternDBAdapter db = null;
+    private PatternAdapter pa = null;
 
     @Override
     protected Integer doInBackground(Object... objects) {
 
 
         // get query content and result set target from packaged objects
-        Context ctx = (Context) objects[0];
-        searchStr = (String) objects[1];
-        patterns = (ArrayList<Pattern>) objects[2];
-        db = (PatternDBAdapter) objects[3];
-        pa = (PatternAdapter) objects[4];
+        searchStr = (String) objects[0];
+        patterns = (ArrayList<Pattern>) objects[1];
+        db = (PatternDBAdapter) objects[2];
+        pa = (PatternAdapter) objects[3];
 
         try {
 
@@ -64,9 +61,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer> {
 
             return ASYNC_TASK_COMPLETED;
         } catch (SQLException e) {
-            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
-
-            return 1;
+            throw e;
         }
     }
 
@@ -76,12 +71,6 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer> {
         if (result == ASYNC_TASK_COMPLETED) {
             pa.notifyDataSetChanged();
         }
-        else if (result > ASYNC_TASK_COMPLETED) {
-            Toast.makeText(ctx, R.string.database_error,
-                    Toast.LENGTH_LONG).show();
-        }
-
-
 
     }
 
