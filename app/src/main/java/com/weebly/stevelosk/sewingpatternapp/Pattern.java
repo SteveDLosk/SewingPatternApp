@@ -126,7 +126,14 @@ public class Pattern implements Serializable{
         this.notes += note;
     }
 
-    private boolean parseNumericSizes(String sizes) {
+    //Override String
+
+    //@Override
+    public String toString() {
+        return "a Pattern with size range of " + getMinNumericSize() + " to " + getMaxNumericSize();
+    }
+
+    protected boolean parseNumericSizes(String sizes) {
         /**
          *  Takes a string of the form number, delimiter, number and assigns the first
          *  number as smallestNumericSize, and the last number as largestNumeric size.

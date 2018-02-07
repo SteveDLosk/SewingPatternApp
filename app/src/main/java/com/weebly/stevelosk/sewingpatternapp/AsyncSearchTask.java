@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -69,6 +70,11 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             // populate the results from the query result set
             while (cursor.moveToNext()) {
                 Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
+                int min = p.getMinNumericSize();
+                int max = p.getMaxNumericSize();
+                Log.w("tag", String.valueOf(min));
+                Log.w("tag", String.valueOf(max));
+                Log.w("tag", p.toString());
                 patterns.add(p);
                 if (this.isCancelled()) {
                     return ASYNC_TASK_CANCELLED;
@@ -76,7 +82,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             }
 
             return ASYNC_TASK_COMPLETED;
-        } catch (SQLException e) {
+        } catch (SQLException e ) {
             throw e;
         }
     }

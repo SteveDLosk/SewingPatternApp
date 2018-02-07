@@ -43,7 +43,8 @@ public class PatternDBAdapter {
     final static String MAX_SIZE = "max_size";
 
     private static final String[] PATTERN_FIELDS = new String[] {
-            KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES, FRONT_IMAGE, BACK_IMAGE
+            KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES, FRONT_IMAGE, BACK_IMAGE,
+            MIN_SIZE, MAX_SIZE
     };
 
     // SQL string to create the table
@@ -51,7 +52,8 @@ public class PatternDBAdapter {
             + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + BRAND + " text not null," + PATTERN_NUMBER + " text,"
             + SIZES + " text," + CONTENT + " text, " + NOTES + " text, "
-            + FRONT_IMAGE + " BLOB, " + BACK_IMAGE + " BLOB"
+            + FRONT_IMAGE + " BLOB, " + BACK_IMAGE + " BLOB, "
+            + MIN_SIZE + " INTEGER, " + MAX_SIZE + " INTEGER "
             + ");";
 
     PatternDBAdapter(Context context) {
@@ -145,7 +147,7 @@ public class PatternDBAdapter {
         if ( ! s2.trim().isEmpty()) {
             try {
                 int size = Integer.parseInt(s2);
-                whereClause.append(MAX_SIZE + " >= ? ");
+                whereClause.append(MAX_SIZE + " >= ? AND ");
                 whereClause.append(MIN_SIZE + " <=  ? ");
                 whereClause.append(" AND ");
                 whereArgs.add(s2);
@@ -171,8 +173,9 @@ public class PatternDBAdapter {
 
         // remove final " AND ";
         String where = whereClause.toString();
-        where = where.substring(0, where.length() - 5);
-
+        if (where.length() >= 5) {
+            where = where.substring(0, where.length() - 5);
+        }
         // Change to String []
         String[] args = whereArgs.toArray(new String[whereArgs.size()]);
 

@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       // PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
+       // db.upgrade(3);
+
+
         topRightButton = (ImageButton) findViewById(R.id.imgButtonTopRight);
         topRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
