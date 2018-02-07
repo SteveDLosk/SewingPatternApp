@@ -11,8 +11,10 @@ import android.text.Selection;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /**
  * Created by steve on 1/27/2018.
@@ -37,6 +39,8 @@ public class PatternDBAdapter {
     final static String NOTES = "notes";
     final static String FRONT_IMAGE = "front_image";
     final static String BACK_IMAGE = "back_image";
+    final static String MIN_SIZE = "min_size";
+    final static String MAX_SIZE = "max_size";
 
     private static final String[] PATTERN_FIELDS = new String[] {
             KEY_ROWID, BRAND, PATTERN_NUMBER, SIZES, CONTENT, NOTES, FRONT_IMAGE, BACK_IMAGE
@@ -118,6 +122,66 @@ public class PatternDBAdapter {
         return db.query(PATTERN_TABLE, PATTERN_FIELDS, where, str,
                 null, null, null);
     }
+
+    Cursor getComplexSearchResultSet (String[] strings) {
+        StringBuilder whereClause = new StringBuilder();
+        ArrayList<String > whereArgs = new ArrayList<>();
+
+        String s0 = strings[0];
+        if ( ! s0.trim().isEmpty()) {
+            whereClause.append(PATTERN_NUMBER);
+            whereClause.append(" like ? ");
+            whereClause.append(" AND ");
+            whereArgs.add("%" + s0 + "%");
+        }
+        String s1 = strings[1];
+        if ( ! s1.trim().isEmpty()) {
+            whereClause.append(BRAND);
+            whereClause.append(" like ? ");
+            whereClause.append(" AND ");
+            whereArgs.add("%" + s1 + "%");
+        }
+        String s2 = strings[2];
+        if ( ! s2.trim().isEmpty()) {
+            try {
+                int size = Integer.parseInt(s2);
+                whereClause.append(MAX_SIZE + " >= ? ");
+                whereClause.append(MIN_SIZE + " <=  ? ");
+                whereClause.append(" AND ");
+                whereArgs.add(s2);
+            }
+            catch (NumberFormatException e) {
+                //TODO: handle this better
+            }
+        }
+        String s3 = strings[3];
+        if ( ! s3.trim().isEmpty()) {
+            whereClause.append(CONTENT);
+            whereClause.append(" like ? ");
+            whereClause.append(" AND ");
+            whereArgs.add("%" + s3 + "%");
+        }
+        String s4 = strings[4];
+        if ( ! s4.trim().isEmpty()) {
+            whereClause.append(NOTES);
+            whereClause.append(" like ? ");
+            whereClause.append(" AND ");
+            whereArgs.add("%" + s4 + "%");
+        }
+
+        // remove final " AND ";
+        String where = whereClause.toString();
+        where = where.substring(0, where.length() - 5);
+
+        // Change to String []
+        String[] args = whereArgs.toArray(new String[whereArgs.size()]);
+
+        Cursor cursor = db.query(PATTERN_TABLE, PATTERN_FIELDS, where, args,
+                    null, null, null);
+        return cursor;
+    }
+
+
 
 
     static Pattern getPatternFromCursor(Cursor cursor) {

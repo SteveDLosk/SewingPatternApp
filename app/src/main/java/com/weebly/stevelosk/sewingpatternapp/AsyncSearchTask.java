@@ -21,6 +21,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
 
     // The passed in objects, in paramater order:
     private String searchStr = "";
+    private String[] advancedSearchStrings = null;
     private ArrayList<Pattern> patterns = null;
     private PatternDBAdapter db = null;
     private PatternAdapter pa = null;
@@ -28,9 +29,18 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     @Override
     protected Integer doInBackground(Object... objects) {
 
+        boolean simple;
 
         // get query content and result set target from packaged objects
-        searchStr = (String) objects[0];
+        if (objects[0] instanceof String) {
+            simple = true;
+            searchStr = (String) objects[0];
+        }
+        else {
+            simple = false;
+            advancedSearchStrings = (String[])  objects[0];
+        }
+
         patterns = (ArrayList<Pattern>) objects[1];
         db = (PatternDBAdapter) objects[2];
         pa = (PatternAdapter) objects[3];
@@ -39,13 +49,19 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
 
             // clear the old result list
             patterns.clear();
+            Cursor cursor;
 
-            // query
-            String[] predicate = new String[2];
-            // surround search string with "%" so partial matches can be found
-            predicate[0] = "%" + searchStr + "%";
-            predicate[1] = "%" + searchStr + "%";
-            Cursor cursor = db.getPatternBy_ID_OR_Content(predicate);
+            if (simple) {
+                // query
+                String[] predicate = new String[2];
+                // surround search string with "%" so partial matches can be found
+                predicate[0] = "%" + searchStr + "%";
+                predicate[1] = "%" + searchStr + "%";
+                cursor = db.getPatternBy_ID_OR_Content(predicate);
+            }
+            else {
+                cursor = db.getComplexSearchResultSet(advancedSearchStrings);
+            }
             if (this.isCancelled()) {
                 return ASYNC_TASK_CANCELLED;
             }

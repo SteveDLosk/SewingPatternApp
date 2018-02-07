@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton topRightButton;
     private ImageButton topLeftButton;
     private ImageButton bottomLeftButton;
+    private ImageButton bottomRightButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent testDBIntent = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(testDBIntent);
+            }
+        });
+
+        bottomRightButton = (ImageButton) findViewById(R.id.imgButtonBottomRight);
+        bottomRightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent advancedSearchIntent = new Intent(getApplicationContext(),
+                        AdvancedSearchActivity.class);
+                startActivity(advancedSearchIntent);
             }
         });
     }
