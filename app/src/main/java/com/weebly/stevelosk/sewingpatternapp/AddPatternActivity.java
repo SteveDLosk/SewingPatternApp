@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -101,6 +102,16 @@ public class AddPatternActivity extends AppCompatActivity {
             values.put(PatternDBAdapter.SIZES, sizes);
             values.put(PatternDBAdapter.CONTENT, contents);
             values.put(PatternDBAdapter.NOTES, notes);
+
+            // Get max and min size
+            Pattern p = new Pattern();
+            Log.w("tag", sizes);
+            boolean sizable = p.parseNumericSizes(sizes);
+            int min, max;
+            if (sizable) {
+                values.put(PatternDBAdapter.MAX_SIZE, p.getMaxNumericSize());
+                values.put(PatternDBAdapter.MIN_SIZE, p.getMinNumericSize());
+            }
 
             // BLOBS
             if (frontImgBitmap != null) {

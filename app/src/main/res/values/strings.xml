@@ -17,4 +17,7 @@
     <string name="pattern_view_item_contentDescription">a thumbnail view of the front of the pattern</string>
     <string name="noPatternsFound">No matching patterns found</string>
     <string name="database_error">Something went wrong</string>
+    <string name="AdvancedSearch_SizeHint">size</string>
+    <string name="AdvancedSearch_NotesHint">notes</string>
+    <string name="AdvancedSearch_SearchButton">Search</string>
 </resources>

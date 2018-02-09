@@ -14,11 +14,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton topRightButton;
     private ImageButton topLeftButton;
     private ImageButton bottomLeftButton;
+    private ImageButton bottomRightButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+       // PatternDBAdapter db = new PatternDBAdapter(getApplicationContext());
+       // db.upgrade(3);
+
 
         topRightButton = (ImageButton) findViewById(R.id.imgButtonTopRight);
         topRightButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +49,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent testDBIntent = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(testDBIntent);
+            }
+        });
+
+        bottomRightButton = (ImageButton) findViewById(R.id.imgButtonBottomRight);
+        bottomRightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent advancedSearchIntent = new Intent(getApplicationContext(),
+                        AdvancedSearchActivity.class);
+                startActivity(advancedSearchIntent);
             }
         });
     }

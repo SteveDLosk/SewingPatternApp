@@ -24,7 +24,8 @@
         <activity android:name=".BasicSearchActivity" />
         <activity android:name=".TestDatabaseActivity" />
         <activity android:name=".BrowseActivity" />
-        <activity android:name=".ExaminePatternActivity"></activity>
+        <activity android:name=".ExaminePatternActivity" />
+        <activity android:name=".AdvancedSearchActivity"></activity>
     </application>
 
 </manifest>
