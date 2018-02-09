@@ -1,9 +1,11 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.content.Intent;
 import android.database.SQLException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,6 +41,18 @@ public class AdvancedSearchActivity extends AppCompatActivity {
         results = new ArrayList<>();
         pa = new PatternAdapter(this, results);
         resultsListView.setAdapter(pa);
+
+        resultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Pattern p = results.get(i);
+
+                Intent examineIntent = new Intent(getApplicationContext(),
+                        ExaminePatternActivity.class);
+                examineIntent.putExtra("PASSED_PATTERN_INSTANCE", p);
+                startActivity(examineIntent);
+            }
+        });
 
         searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
