@@ -151,6 +151,7 @@ public class PatternDBAdapter {
                 whereClause.append(MIN_SIZE + " <=  ? ");
                 whereClause.append(" AND ");
                 whereArgs.add(s2);
+                whereArgs.add(s2);
             }
             catch (NumberFormatException e) {
                 //TODO: handle this better
