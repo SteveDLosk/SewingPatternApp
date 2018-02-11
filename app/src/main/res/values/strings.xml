@@ -20,4 +20,12 @@
     <string name="AdvancedSearch_SizeHint">size</string>
     <string name="AdvancedSearch_NotesHint">notes</string>
     <string name="AdvancedSearch_SearchButton">Search</string>
+    <string name="examineActivity_EditButton">Edit</string>
+    <string name="ExamineActivity_saveButton">Save</string>
+    <string name="ExamineActivity_cancelButton">Cancel</string>
+    <string name="patternNumber">Pattern Number</string>
+    <string name="brand">Brand</string>
+    <string name="sizes">Sizes</string>
+    <string name="contents">Contents</string>
+    <string name="notes">Notes</string>
 </resources>
