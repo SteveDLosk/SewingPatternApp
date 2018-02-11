@@ -1,6 +1,8 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -23,6 +25,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
 
     private Pattern thisPattern;
     private final String TAG = "ExaminePatternActivity";
+    private PatternDBAdapter db = null;
 
     private TextView brandTV, patternNumberTV, sizesTV, contentsTV, notesTV;
     private EditText patternNumberET, brandET, sizesET, contentsET, notesET;
@@ -72,6 +75,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updatePattern();
                 disableEdit();
             }
         });
@@ -93,7 +97,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
             brandET.setText(thisPattern.getBrand());
             patternNumberET.setText(thisPattern.getPatternNumber());
             sizesET.setText(thisPattern.getSizes());
-            contentsET.setText(thisPattern.getSizes());
+            contentsET.setText(thisPattern.getContent());
             notesET.setText(thisPattern.getNotes());
 
             frontImg = (ImageView) findViewById(R.id.frontImage);
@@ -161,6 +165,42 @@ public class ExaminePatternActivity extends AppCompatActivity {
         // prevent accidental changes
         for (EditText et : editTexts) {
                 et.setInputType(TYPE_NULL);
+        }
+    }
+
+    private void updatePattern() {
+
+        try {
+            db = new PatternDBAdapter(getApplicationContext());
+
+            db.open();
+
+            Pattern p = new Pattern();
+            p.setPatternNumber(patternNumberET.getText().toString());
+            p.setBrand(brandET.getText().toString());
+            p.setSizes(sizesET.getText().toString());
+            p.setContent(contentsET.getText().toString());
+            p.setNotes(notesET.getText().toString());
+            p.parseNumericSizes(sizesET.getText().toString());
+
+            ContentValues cv = new ContentValues();
+            cv.put(PatternDBAdapter.PATTERN_NUMBER, p.getPatternNumber());
+            cv.put(PatternDBAdapter.BRAND, p.getBrand());
+            cv.put(PatternDBAdapter.SIZES, p.getSizes());
+            cv.put(PatternDBAdapter.MIN_SIZE, p.getMinNumericSize());
+            cv.put(PatternDBAdapter.MAX_SIZE, p.getMaxNumericSize());
+            cv.put(PatternDBAdapter.CONTENT, p.getContent());
+            cv.put(PatternDBAdapter.NOTES, p.getNotes());
+
+            db.updatePattern(thisPattern.getPatternId(), cv);
+
+        }
+        catch (SQLException e) {
+
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        finally {
+            db.close();
         }
     }
 }
