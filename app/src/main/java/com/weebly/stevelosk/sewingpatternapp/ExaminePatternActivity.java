@@ -6,17 +6,28 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_NULL;
+
 public class ExaminePatternActivity extends AppCompatActivity {
 
     private Pattern thisPattern;
+    private final String TAG = "ExaminePatternActivity";
 
-    private TextView brandTextView, patternNumberTextView, sizesTextView, contentsTextView;
-    private EditText notesEditText;
+    private TextView brandTV, patternNumberTV, sizesTV, contentsTV, notesTV;
+    private EditText patternNumberET, brandET, sizesET, contentsET, notesET;
+    private ArrayList<EditText> editTexts = new ArrayList<>();
+    private Button editButton, saveButton, cancelButton;
     private ImageView frontImg;
     private ImageView backImg;
 
@@ -28,11 +39,48 @@ public class ExaminePatternActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examine_pattern);
 
-        brandTextView = (TextView) findViewById(R.id.brandTextView);
-        patternNumberTextView = (TextView) findViewById(R.id.patternNumberTextView);
-        sizesTextView = (TextView) findViewById(R.id.sizesTextView);
-        contentsTextView = (TextView) findViewById(R.id.contentsTextView);
-        notesEditText = (EditText) findViewById(R.id.notesEditText);
+
+        /*
+        brandTV = (TextView) findViewById(R.id.brandTextView);
+        patternNumberTV = (TextView) findViewById(R.id.patternNumberTextView);
+        sizesTV = (TextView) findViewById(R.id.sizesTextView);
+        contentsTV = (TextView) findViewById(R.id.contentsTextView);
+        notesTV = (TextView) findViewById(R.id.notesTextView);
+        */
+
+        patternNumberET = (EditText) findViewById(R.id.patternNumberEditText);
+        brandET = (EditText) findViewById(R.id.brandEditText);
+        sizesET = (EditText) findViewById(R.id.sizesEditText);
+        contentsET = (EditText) findViewById(R.id.contentsEditText);
+        notesET = (EditText) findViewById(R.id.notesEditText);
+
+        editTexts.add(patternNumberET); editTexts.add(brandET); editTexts.add(sizesET);
+        editTexts.add(contentsET); editTexts.add(notesET);
+
+        editButton = (Button) findViewById(R.id.examineEditButton);
+        saveButton = (Button) findViewById(R.id.examineSaveButton);
+        cancelButton = (Button) findViewById(R.id.examineCancelButton);
+
+        disableEdit();
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                allowEdit();
+            }
+        });
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disableEdit();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disableEdit();
+            }
+        });
 
         // Get the saved Pattern object from the Intent
         try {
@@ -42,11 +90,11 @@ public class ExaminePatternActivity extends AppCompatActivity {
             }
 
             // Fill text data from Pattern instance
-            brandTextView.setText(thisPattern.getBrand());
-            patternNumberTextView.setText(thisPattern.getPatternNumber());
-            sizesTextView.setText(thisPattern.getSizes());
-            contentsTextView.setText(thisPattern.getSizes());
-            notesEditText.setText(thisPattern.getNotes());
+            brandET.setText(thisPattern.getBrand());
+            patternNumberET.setText(thisPattern.getPatternNumber());
+            sizesET.setText(thisPattern.getSizes());
+            contentsET.setText(thisPattern.getSizes());
+            notesET.setText(thisPattern.getNotes());
 
             frontImg = (ImageView) findViewById(R.id.frontImage);
             backImg = (ImageView) findViewById(R.id.backImage);
@@ -81,6 +129,38 @@ public class ExaminePatternActivity extends AppCompatActivity {
             Bitmap image = BitmapFactory.decodeByteArray(p.getBackImgBytes(), 0,
                     p.getBackImgBytes().length);
             imageView.setImageBitmap(image);
+        }
+    }
+
+    private void allowEdit() {
+        /*
+        Switches this activity to "edit mode", allowing fields to be editable, and showing the
+         save and cancel buttons
+         */
+        editButton.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+        cancelButton.setVisibility(View.VISIBLE);
+
+        // Allow text editing of pattern fields
+        for (EditText et : editTexts) {
+            et.setInputType(TYPE_CLASS_TEXT);
+        }
+
+        // do something to provide a visual que
+
+    }
+
+    private void disableEdit() {
+        /*
+        Closes "edit mode", changing button visibility, and disabling text edting
+         */
+        editButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+
+        // prevent accidental changes
+        for (EditText et : editTexts) {
+                et.setInputType(TYPE_NULL);
         }
     }
 }

@@ -47,7 +47,7 @@
         android:textSize="14sp" />
 
     <EditText
-        android:id="@+id/brandEditView"
+        android:id="@+id/brandEditText"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_column="1"
