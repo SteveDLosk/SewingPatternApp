@@ -30,7 +30,6 @@ public class ExaminePatternActivity extends AppCompatActivity {
     private PatternDBAdapter db = null;
     private boolean editMode = false;
 
-    private TextView brandTV, patternNumberTV, sizesTV, contentsTV, notesTV;
     private EditText patternNumberET, brandET, sizesET, contentsET, notesET;
     private ArrayList<EditText> editTexts = new ArrayList<>();
     private Button editButton, saveButton, cancelButton;
@@ -50,16 +49,6 @@ public class ExaminePatternActivity extends AppCompatActivity {
 
         frontImg = (ImageView) findViewById(R.id.frontImage);
         backImg = (ImageView) findViewById(R.id.backImage);
-
-
-
-        /*
-        brandTV = (TextView) findViewById(R.id.brandTextView);
-        patternNumberTV = (TextView) findViewById(R.id.patternNumberTextView);
-        sizesTV = (TextView) findViewById(R.id.sizesTextView);
-        contentsTV = (TextView) findViewById(R.id.contentsTextView);
-        notesTV = (TextView) findViewById(R.id.notesTextView);
-        */
 
         patternNumberET = (EditText) findViewById(R.id.patternNumberEditText);
         brandET = (EditText) findViewById(R.id.brandEditText);
@@ -239,25 +228,17 @@ public class ExaminePatternActivity extends AppCompatActivity {
         }
     }
 
-        private void imageCloseUp (ImageView iv) {
-        if (thisPattern.getFrontImgBytes() != null) {
-            Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getFrontImgBytes(), 0,
-                    thisPattern.getFrontImgBytes().length);
-
-            //image.sc
-            iv.setImageBitmap(image);
-        }
-    }
-
     private void updatePicture (ImageView iv) {
+
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // logical flag for which image needs updated
         int requestCode = 0;
         if (iv == frontImg) {
-            requestCode = 1;
+            requestCode = FRONT_IMAGE_NUMBER;
         }
         else if (iv == backImg) {
-            requestCode = 2;
+            requestCode = BACK_IMAGE_NUMBER;
         }
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, requestCode);
@@ -287,7 +268,6 @@ public class ExaminePatternActivity extends AppCompatActivity {
             // update UI
             // This could throw a null object exception, but really only if an incorrect
             // request code is set.
-            assert (requestCode == 1 || requestCode == 2);
             target.setImageBitmap(image);
 
         }
@@ -298,23 +278,21 @@ public class ExaminePatternActivity extends AppCompatActivity {
         try {
             setFrontImageFromByteArray(thisPattern, frontImg);
             if (thisPattern.getFrontImgBytes() != null) {
-                Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getFrontImgBytes(), 0,
+                frontImageBitmap = BitmapFactory.decodeByteArray(thisPattern.getFrontImgBytes(), 0,
                         thisPattern.getFrontImgBytes().length);
-                frontImageBitmap = image;
             }
 
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
         }
         try {
             setBackImageFromByteArray(thisPattern, backImg);
             if (thisPattern.getBackImgBytes() != null) {
-                Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getBackImgBytes(), 0,
+                backImageBitmap = BitmapFactory.decodeByteArray(thisPattern.getBackImgBytes(), 0,
                         thisPattern.getBackImgBytes().length);
-                backImageBitmap = image;
             }
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
         }
     }
 
