@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.os.Parcel;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -102,6 +103,9 @@ public class ExaminePatternActivity extends AppCompatActivity {
                 if (editMode) {
                     updatePicture((ImageView) view);
                 }
+                else {
+                    displayPicture (frontImageBitmap);
+                }
             }
         });
         backImg.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +113,9 @@ public class ExaminePatternActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (editMode) {
                     updatePicture((ImageView) view);
+                }
+                else {
+                    displayPicture (backImageBitmap);
                 }
             }
         });
@@ -290,15 +297,32 @@ public class ExaminePatternActivity extends AppCompatActivity {
         // get images
         try {
             setFrontImageFromByteArray(thisPattern, frontImg);
+            if (thisPattern.getFrontImgBytes() != null) {
+                Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getFrontImgBytes(), 0,
+                        thisPattern.getFrontImgBytes().length);
+                frontImageBitmap = image;
+            }
 
         } catch (NullPointerException e) {
 
         }
         try {
             setBackImageFromByteArray(thisPattern, backImg);
+            if (thisPattern.getBackImgBytes() != null) {
+                Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getBackImgBytes(), 0,
+                        thisPattern.getBackImgBytes().length);
+                backImageBitmap = image;
+            }
         } catch (NullPointerException e) {
 
         }
     }
 
+    private void displayPicture (Bitmap bitmap) {
+        Intent showImageIntent = new Intent(getApplicationContext(), ImageCloseUp.class);
+        showImageIntent.putExtra("PASSED_IMAGE", bitmap);
+
+        startActivity(showImageIntent);
+
+    }
 }
