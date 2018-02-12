@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gridLayout"
     android:columnCount="2"
     android:rowCount="7"
     android:layout_width="match_parent"
@@ -164,6 +165,7 @@
         android:layout_gravity="center"
         android:layout_row="6"
         android:text="@string/ExamineActivity_saveButton"
+        android:padding="24dp"
         android:visibility="gone" />
 
     <Button
@@ -172,6 +174,7 @@
         android:layout_gravity="center"
         android:layout_row="6"
         android:text="@string/ExamineActivity_cancelButton"
+        android:padding="24dp"
         android:visibility="gone" />
 
 
