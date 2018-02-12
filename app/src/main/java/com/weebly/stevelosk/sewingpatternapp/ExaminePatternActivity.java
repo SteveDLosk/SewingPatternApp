@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
     private Pattern thisPattern;
     private final String TAG = "ExaminePatternActivity";
     private PatternDBAdapter db = null;
+    private boolean editMode = false;
 
     private TextView brandTV, patternNumberTV, sizesTV, contentsTV, notesTV;
     private EditText patternNumberET, brandET, sizesET, contentsET, notesET;
@@ -34,13 +36,20 @@ public class ExaminePatternActivity extends AppCompatActivity {
     private ImageView frontImg;
     private ImageView backImg;
 
-    private final int FRONT_IMAGE_NUMBER = 0;
-    private final int BACK_IMAGE_NUMBER = 1;
+    private final int FRONT_IMAGE_NUMBER = 1;
+    private final int BACK_IMAGE_NUMBER = 2;
+    private Bitmap frontImageBitmap;
+    private Bitmap backImageBitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examine_pattern);
+
+        frontImg = (ImageView) findViewById(R.id.frontImage);
+        backImg = (ImageView) findViewById(R.id.backImage);
+
 
 
         /*
@@ -83,6 +92,24 @@ public class ExaminePatternActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disableEdit();
+                getPassedPatternInstanceImages();
+            }
+        });
+
+        frontImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editMode) {
+                    updatePicture((ImageView) view);
+                }
+            }
+        });
+        backImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editMode) {
+                    updatePicture((ImageView) view);
+                }
             }
         });
 
@@ -100,21 +127,8 @@ public class ExaminePatternActivity extends AppCompatActivity {
             contentsET.setText(thisPattern.getContent());
             notesET.setText(thisPattern.getNotes());
 
-            frontImg = (ImageView) findViewById(R.id.frontImage);
-            backImg = (ImageView) findViewById(R.id.backImage);
-
             // get images
-            try {
-                setFrontImageFromByteArray(thisPattern, frontImg);
-
-            } catch (NullPointerException e) {
-
-            }
-            try {
-                setBackImageFromByteArray(thisPattern, backImg);
-            } catch (NullPointerException e) {
-
-            }
+            getPassedPatternInstanceImages();
         }
         catch (NullPointerException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -141,6 +155,9 @@ public class ExaminePatternActivity extends AppCompatActivity {
         Switches this activity to "edit mode", allowing fields to be editable, and showing the
          save and cancel buttons
          */
+
+        editMode = true;
+
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
@@ -158,6 +175,9 @@ public class ExaminePatternActivity extends AppCompatActivity {
         /*
         Closes "edit mode", changing button visibility, and disabling text edting
          */
+
+        editMode = false;
+
         editButton.setVisibility(View.VISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
         cancelButton.setVisibility(View.INVISIBLE);
@@ -192,15 +212,93 @@ public class ExaminePatternActivity extends AppCompatActivity {
             cv.put(PatternDBAdapter.CONTENT, p.getContent());
             cv.put(PatternDBAdapter.NOTES, p.getNotes());
 
+            // BLOBS
+            if (frontImageBitmap != null) {
+                cv.put(PatternDBAdapter.FRONT_IMAGE,
+                        PatternDBAdapter.bitmapToByteArray2(frontImageBitmap));
+            }
+            if (backImageBitmap != null) {
+                cv.put(PatternDBAdapter.BACK_IMAGE,
+                        PatternDBAdapter.bitmapToByteArray2(backImageBitmap));
+            }
+
             db.updatePattern(thisPattern.getPatternId(), cv);
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
 
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        finally {
+        } finally {
             db.close();
         }
     }
+
+        private void imageCloseUp (ImageView iv) {
+        if (thisPattern.getFrontImgBytes() != null) {
+            Bitmap image = BitmapFactory.decodeByteArray(thisPattern.getFrontImgBytes(), 0,
+                    thisPattern.getFrontImgBytes().length);
+
+            //image.sc
+            iv.setImageBitmap(image);
+        }
+    }
+
+    private void updatePicture (ImageView iv) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // logical flag for which image needs updated
+        int requestCode = 0;
+        if (iv == frontImg) {
+            requestCode = 1;
+        }
+        else if (iv == backImg) {
+            requestCode = 2;
+        }
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, requestCode);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // set the camera picture target
+        ImageView target = null;
+        // get the image as a Bitmap
+        Bundle extras = data.getExtras();
+
+        // select the right ImageView to update and log there is an image taken
+        if (resultCode == RESULT_OK) {
+            Bitmap image = (Bitmap) extras.get("data");
+            if (requestCode == 1) {
+                target = (ImageView) findViewById(R.id.frontImage);
+                // reference for saving to the database
+                 frontImageBitmap = image;
+            }
+            else if (requestCode == 2) {
+                target = (ImageView) findViewById(R.id.backImage);
+                backImageBitmap = image;
+            }
+            // update UI
+            // This could throw a null object exception, but really only if an incorrect
+            // request code is set.
+            assert (requestCode == 1 || requestCode == 2);
+            target.setImageBitmap(image);
+
+        }
+    }
+
+    private void getPassedPatternInstanceImages () {
+        // get images
+        try {
+            setFrontImageFromByteArray(thisPattern, frontImg);
+
+        } catch (NullPointerException e) {
+
+        }
+        try {
+            setBackImageFromByteArray(thisPattern, backImg);
+        } catch (NullPointerException e) {
+
+        }
+    }
+
 }
