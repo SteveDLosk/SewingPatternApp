@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
     private Button editButton, saveButton, cancelButton;
     private ImageView frontImg;
     private ImageView backImg;
+    private GridLayout gridLayout;
 
     private final int FRONT_IMAGE_NUMBER = 1;
     private final int BACK_IMAGE_NUMBER = 2;
@@ -49,6 +51,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
 
         frontImg = (ImageView) findViewById(R.id.frontImage);
         backImg = (ImageView) findViewById(R.id.backImage);
+        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
 
         patternNumberET = (EditText) findViewById(R.id.patternNumberEditText);
         brandET = (EditText) findViewById(R.id.brandEditText);
@@ -164,6 +167,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
         }
 
         // do something to provide a visual que
+        gridLayout.setBackgroundResource(R.drawable.edit_mode_border);
 
     }
 
@@ -182,6 +186,9 @@ public class ExaminePatternActivity extends AppCompatActivity {
         for (EditText et : editTexts) {
                 et.setInputType(TYPE_NULL);
         }
+
+        // remove visual hint about edit mode
+        gridLayout.setBackgroundResource(R.drawable.view_mode_no_border);
     }
 
     private void updatePattern() {
