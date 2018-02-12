@@ -231,7 +231,7 @@ public class PatternDBAdapter {
                     */
 
         // Compress the bitmap to jpeg format and 50% image quality
-        bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
 
         // Create a byte array from ByteArrayOutputStream
         byte[] byteArray = stream.toByteArray();
