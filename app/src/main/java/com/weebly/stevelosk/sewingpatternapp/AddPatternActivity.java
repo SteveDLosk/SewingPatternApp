@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -177,8 +178,10 @@ public class AddPatternActivity extends AppCompatActivity {
         Provides confirmation to user the data is saved, and clears text fields
         and image holders for a new pattern.
          */
-        Toast.makeText(getApplicationContext(), R.string.AddPatternSuccess,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.AddPatternSuccess,
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
 
         // clear all text fields
         patternNumberET.setText("");
