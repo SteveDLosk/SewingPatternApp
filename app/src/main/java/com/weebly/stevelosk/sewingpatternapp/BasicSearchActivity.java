@@ -46,6 +46,7 @@ public class BasicSearchActivity extends AppCompatActivity {
     private PatternAdapter pa = null;
     private PatternDBAdapter db = null;
     private AsyncSearchTask searchTask = null;
+    private int searchMode = AsyncSearchTask.CLOSE_ANY_TEXT_FIELD_MATCH;
 
     private final String TAG = "SDL BasicSearchActivity";
 
@@ -108,7 +109,7 @@ public class BasicSearchActivity extends AppCompatActivity {
                         try {
                             searchTask = new AsyncSearchTask();
                             Object[] params = {searchEditText.getText().toString(),
-                                    patterns, db, pa};
+                                    patterns, db, pa, searchMode};
                             searchTask.execute(params);
                         }
                         catch (SQLException e) {

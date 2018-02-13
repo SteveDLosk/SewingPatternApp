@@ -20,12 +20,21 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     private static final int ASYNC_TASK_CANCELLED = -1;
     private static final int ASYNC_TASK_COMPLETED = 0;
 
+    // search codes to select appropriate SQL query
+    protected static final int EXACT_PATTERN_NUMBER_MATCH = 1;
+    protected static final int CLOSE_PATTERN_NUMBER_MATCH = 2;
+    protected static final int CLOSE_CONTENT_MATCH = 3;
+    protected static final int CLOSE_PATTERN_NUMBER_OR_CONTENT_MATCH = 4;
+    protected static final int CLOSE_ANY_TEXT_FIELD_MATCH = 5;
+    protected static final int COMPLEX_SEARCH = 6;
+
     // The passed in objects, in paramater order:
     private String searchStr = "";
     private String[] advancedSearchStrings = null;
     private ArrayList<Pattern> patterns = null;
     private PatternDBAdapter db = null;
     private PatternAdapter pa = null;
+    private int searchMode;
 
     @Override
     protected Integer doInBackground(Object... objects) {
@@ -45,20 +54,41 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
         patterns = (ArrayList<Pattern>) objects[1];
         db = (PatternDBAdapter) objects[2];
         pa = (PatternAdapter) objects[3];
+        searchMode = (int) objects[4];
 
         try {
 
             // clear the old result list
             patterns.clear();
-            Cursor cursor;
+            Cursor cursor = null;
 
             if (simple) {
                 // query
-                String[] predicate = new String[2];
+                String[] predicate = new String[4];
                 // surround search string with "%" so partial matches can be found
                 predicate[0] = "%" + searchStr + "%";
                 predicate[1] = "%" + searchStr + "%";
-                cursor = db.getPatternBy_ID_OR_Content(predicate);
+                predicate[2] = "%" + searchStr + "%";
+                predicate[3] = "%" + searchStr + "%";
+
+                switch (searchMode) {
+                    case EXACT_PATTERN_NUMBER_MATCH: cursor = db.getPatternByID(predicate);
+                    break;
+
+                    case CLOSE_PATTERN_NUMBER_MATCH: cursor = db.getPatternByLikeID(predicate);
+                    break;
+
+                    case CLOSE_CONTENT_MATCH: cursor = db.getPatternByLikeContent(predicate);
+                    break;
+
+                    case CLOSE_PATTERN_NUMBER_OR_CONTENT_MATCH: cursor =
+                            db.getPatternBy_ID_OR_Content(predicate);
+                            break;
+
+                    case CLOSE_ANY_TEXT_FIELD_MATCH: cursor = db.getPatternByAnyTextField(predicate);
+                    break;
+                }
+
             }
             else {
                 cursor = db.getComplexSearchResultSet(advancedSearchStrings);
@@ -68,16 +98,18 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             }
 
             // populate the results from the query result set
-            while (cursor.moveToNext()) {
-                Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
-                int min = p.getMinNumericSize();
-                int max = p.getMaxNumericSize();
-                Log.w("tag", String.valueOf(min));
-                Log.w("tag", String.valueOf(max));
-                Log.w("tag", p.toString());
-                patterns.add(p);
-                if (this.isCancelled()) {
-                    return ASYNC_TASK_CANCELLED;
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
+                    int min = p.getMinNumericSize();
+                    int max = p.getMaxNumericSize();
+                    Log.w("tag", String.valueOf(min));
+                    Log.w("tag", String.valueOf(max));
+                    Log.w("tag", p.toString());
+                    patterns.add(p);
+                    if (this.isCancelled()) {
+                        return ASYNC_TASK_CANCELLED;
+                    }
                 }
             }
 

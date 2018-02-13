@@ -22,6 +22,7 @@ public class AdvancedSearchActivity extends AppCompatActivity {
     private ArrayList<Pattern> results = null;
     private PatternAdapter pa = null;
     private PatternDBAdapter db = null;
+    private int searchMode = AsyncSearchTask.COMPLEX_SEARCH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class AdvancedSearchActivity extends AppCompatActivity {
 
                 try {
                     AsyncSearchTask task = new AsyncSearchTask();
-                    Object[] params = {searchFieldData, results, db, pa};
+                    Object[] params = {searchFieldData, results, db, pa, searchMode};
                     task.execute(params);
                 }
                 catch (SQLException e) {
