@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -227,9 +228,16 @@ public class ExaminePatternActivity extends AppCompatActivity {
 
             db.updatePattern(thisPattern.getPatternId(), cv);
 
-        } catch (SQLException e) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.ModifyPatternSuccess,
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, -100);
+            toast.show();
 
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (SQLException e) {
+            Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(),
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         } finally {
             db.close();
         }
@@ -255,28 +263,32 @@ public class ExaminePatternActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // set the camera picture target
-        ImageView target = null;
-        // get the image as a Bitmap
-        Bundle extras = data.getExtras();
+        try {
+            // set the camera picture target
+            ImageView target = null;
+            // get the image as a Bitmap
+            Bundle extras = data.getExtras();
 
-        // select the right ImageView to update and log there is an image taken
-        if (resultCode == RESULT_OK) {
-            Bitmap image = (Bitmap) extras.get("data");
-            if (requestCode == 1) {
-                target = (ImageView) findViewById(R.id.frontImage);
-                // reference for saving to the database
-                 frontImageBitmap = image;
-            }
-            else if (requestCode == 2) {
-                target = (ImageView) findViewById(R.id.backImage);
-                backImageBitmap = image;
-            }
-            // update UI
-            // This could throw a null object exception, but really only if an incorrect
-            // request code is set.
-            target.setImageBitmap(image);
+            // select the right ImageView to update and log there is an image taken
+            if (resultCode == RESULT_OK) {
+                Bitmap image = (Bitmap) extras.get("data");
+                if (requestCode == 1) {
+                    target = (ImageView) findViewById(R.id.frontImage);
+                    // reference for saving to the database
+                    frontImageBitmap = image;
+                } else if (requestCode == 2) {
+                    target = (ImageView) findViewById(R.id.backImage);
+                    backImageBitmap = image;
+                }
+                // update UI
+                // This could throw a null object exception, but really only if an incorrect
+                // request code is set.
+                target.setImageBitmap(image);
 
+            }
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
