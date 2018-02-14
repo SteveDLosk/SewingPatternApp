@@ -17,6 +17,7 @@
     <string name="AddPattern_brandHint">brand</string>
     <string name="pattern_view_item_contentDescription">a thumbnail view of the front of the pattern</string>
     <string name="noPatternsFound">No matching patterns found</string>
+    <string name="pattern_deleted">The pattern has been deleted</string>
     <string name="database_error">Something went wrong</string>
     <string name="AdvancedSearch_SizeHint">size</string>
     <string name="AdvancedSearch_NotesHint">notes</string>
@@ -24,6 +25,9 @@
     <string name="examineActivity_EditButton">Edit</string>
     <string name="ExamineActivity_saveButton">Save</string>
     <string name="ExamineActivity_cancelButton">Cancel</string>
+    <string name="ExamineActivity_deleteButton">Delete</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="dialog_confirm_delete">Are you sure you want to delete this pattern?</string>
     <string name="patternNumber">Pattern Number</string>
     <string name="brand">Brand</string>
     <string name="sizes">Sizes</string>

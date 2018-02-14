@@ -11,6 +11,7 @@ import android.text.Selection;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Created by steve on 1/27/2018.
  */
 
-public class PatternDBAdapter {
+public class PatternDBAdapter implements Serializable{
 
     private static final String DATABASE_NAME = "PATTERNS_DATABASE.db";
     private static final String PATTERN_TABLE = "PATTERN_TABLE";
@@ -206,9 +207,6 @@ public class PatternDBAdapter {
                     null, null, null);
         return cursor;
     }
-
-
-
 
     static Pattern getPatternFromCursor(Cursor cursor) {
         Pattern p = new Pattern();

@@ -1,6 +1,11 @@
 package com.weebly.stevelosk.sewingpatternapp;
 
+import android.app.AlertDialog;
+import android.app.Application;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.SQLException;
 import android.graphics.Bitmap;
@@ -34,7 +39,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
 
     private EditText patternNumberET, brandET, sizesET, contentsET, notesET;
     private ArrayList<EditText> editTexts = new ArrayList<>();
-    private Button editButton, saveButton, cancelButton;
+    private Button editButton, saveButton, cancelButton, deleteButton;
     private ImageView frontImg;
     private ImageView backImg;
     private GridLayout gridLayout;
@@ -66,6 +71,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
         editButton = (Button) findViewById(R.id.examineEditButton);
         saveButton = (Button) findViewById(R.id.examineSaveButton);
         cancelButton = (Button) findViewById(R.id.examineCancelButton);
+        deleteButton = (Button) findViewById(R.id.examineDeleteButton);
 
         disableEdit();
 
@@ -87,6 +93,13 @@ public class ExaminePatternActivity extends AppCompatActivity {
             public void onClick(View view) {
                 disableEdit();
                 getPassedPatternInstanceImages();
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                deleteDialog();
             }
         });
 
@@ -161,6 +174,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
+        deleteButton.setVisibility(View.VISIBLE);
 
         // Allow text editing of pattern fields
         for (EditText et : editTexts) {
@@ -182,6 +196,7 @@ public class ExaminePatternActivity extends AppCompatActivity {
         editButton.setVisibility(View.VISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
         cancelButton.setVisibility(View.INVISIBLE);
+        deleteButton.setVisibility(View.INVISIBLE);
 
         // prevent accidental changes
         for (EditText et : editTexts) {
@@ -322,4 +337,35 @@ public class ExaminePatternActivity extends AppCompatActivity {
         startActivity(showImageIntent);
 
     }
+
+    private void deleteDialog() {
+
+        try {
+            db = new PatternDBAdapter(getApplicationContext());
+
+            db.open();
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.confirmation)
+                    .setMessage(R.string.dialog_confirm_delete)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(R.string.ExamineActivity_deleteButton, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            db.deletePattern(thisPattern.getPatternId());
+                            Toast.makeText(getApplicationContext(), R.string.pattern_deleted,
+                                    Toast.LENGTH_SHORT).show();
+                            // close activity, since this pattern no longer exists
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+
+        }
+        catch (SQLException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
+
+
