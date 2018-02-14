@@ -31,7 +31,7 @@ import java.util.TimerTask;
 
 public class BasicSearchActivity extends AppCompatActivity {
 
-    private String searchString = "";
+    private String savedSearchString = "";
     private EditText searchEditText;
     private TextView resultsTextView;
     private ArrayList<Pattern> patterns = new ArrayList<>();
@@ -121,6 +121,29 @@ public class BasicSearchActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.w(TAG, "entered onResume");
+
+        try {
+            searchTask = new AsyncSearchTask();
+            Object[] params = {searchEditText.getText().toString(),
+                    patterns, db, pa, searchMode};
+            searchTask.execute(params);
+        }
+        catch (SQLException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        savedSearchString = searchEditText.getText().toString();
     }
 
     @Override

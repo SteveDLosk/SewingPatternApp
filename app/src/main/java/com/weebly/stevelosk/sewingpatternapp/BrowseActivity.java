@@ -16,6 +16,7 @@ public class BrowseActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList patterns = new ArrayList();
+    private PatternAdapter pa = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class BrowseActivity extends AppCompatActivity {
         getPatterns();
 
         listView = (ListView) findViewById(R.id.browseActivity_ListView);
-        PatternAdapter pa = new PatternAdapter(this, patterns);
+        pa = new PatternAdapter(this, patterns);
         listView.setAdapter(pa);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,5 +66,12 @@ public class BrowseActivity extends AppCompatActivity {
         finally {
             db.close();
         }
+    }
+
+    protected void onResume() {
+        super.onResume();
+        patterns.clear();
+        pa.notifyDataSetChanged();
+        getPatterns();
     }
 }

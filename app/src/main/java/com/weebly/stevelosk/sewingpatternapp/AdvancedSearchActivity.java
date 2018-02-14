@@ -60,6 +60,7 @@ public class AdvancedSearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Collect string data from EditText fields
+                /*
                 String[] searchFieldData = {patternNumberET.getText().toString(),
                         brandET.getText().toString(), sizesET.getText().toString(),
                         contentsET.getText().toString(), notesET.getText().toString()};
@@ -72,10 +73,35 @@ public class AdvancedSearchActivity extends AppCompatActivity {
                 catch (SQLException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
+                */
+                advancedSearch();
 
             }
         });
 
+
+    }
+
+    protected void onResume() {
+        super.onResume();
+        results.clear();
+        pa.notifyDataSetChanged();
+        advancedSearch();
+    }
+
+    private void advancedSearch() {
+        String[] searchFieldData = {patternNumberET.getText().toString(),
+                brandET.getText().toString(), sizesET.getText().toString(),
+                contentsET.getText().toString(), notesET.getText().toString()};
+
+        try {
+            AsyncSearchTask task = new AsyncSearchTask();
+            Object[] params = {searchFieldData, results, db, pa, searchMode};
+            task.execute(params);
+        }
+        catch (SQLException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
     }
 }
