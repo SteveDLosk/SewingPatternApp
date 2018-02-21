@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddPatternActivity" />
-        <activity android:name=".BasicSearchActivity" />
+        <activity android:name=".BasicSearchActivity"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity android:name=".TestDatabaseActivity" />
         <activity android:name=".BrowseActivity" />
         <activity android:name=".ExaminePatternActivity" />
