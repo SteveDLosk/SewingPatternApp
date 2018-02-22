@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BasicSearchActivity extends AppCompatActivity {
+public class BasicSearchActivity extends AppCompatActivity implements IAsyncCalling {
 
     private String savedSearchString = "";
     private EditText searchEditText;
@@ -37,6 +38,8 @@ public class BasicSearchActivity extends AppCompatActivity {
     private ArrayList<Pattern> patterns = new ArrayList<>();
     private ImageView placeHolderImage;
     private ListView resultsListView;
+
+    private Toast toast;
 
 
     // a Timer to wait between text changes before firing a search event
@@ -49,6 +52,7 @@ public class BasicSearchActivity extends AppCompatActivity {
     private int searchMode = AsyncSearchTask.CLOSE_ANY_TEXT_FIELD_MATCH;
 
     private final String TAG = "SDL BasicSearchActivity";
+    private BasicSearchActivity mActivity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,8 @@ public class BasicSearchActivity extends AppCompatActivity {
         // open database onCreate
         db = new PatternDBAdapter(this);
         db.open();
+
+        toast = new Toast(getApplicationContext());
 
         searchEditText = (EditText) findViewById(R.id.searchEditText);
         resultsTextView = (TextView) findViewById(R.id.searchActivity_resultsTextView);
@@ -107,11 +113,12 @@ public class BasicSearchActivity extends AppCompatActivity {
                             searchTask.cancel(true);
                         }
                         try {
+                            IAsyncCalling caller = (IAsyncCalling) mActivity;
                             searchTask = new AsyncSearchTask();
                             Object[] params = {searchEditText.getText().toString(),
-                                    patterns, db, pa, searchMode};
+                                    patterns, db, pa, searchMode, caller};
                             searchTask.execute(params);
-                        }
+                                                    }
                         catch (SQLException e) {
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -151,4 +158,13 @@ public class BasicSearchActivity extends AppCompatActivity {
         super.onDestroy();
         db.close();
     }
+
+    public void reportNoResults () {
+        toast.cancel();
+        toast = Toast.makeText(getApplicationContext(), R.string.noPatternsFound,
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
 }
