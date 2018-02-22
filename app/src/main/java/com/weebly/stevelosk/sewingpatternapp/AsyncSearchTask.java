@@ -35,6 +35,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     private PatternDBAdapter db = null;
     private PatternAdapter pa = null;
     private int searchMode;
+    private IAsyncCalling calling = null;
 
     @Override
     protected Integer doInBackground(Object... objects) {
@@ -55,6 +56,9 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
         db = (PatternDBAdapter) objects[2];
         pa = (PatternAdapter) objects[3];
         searchMode = (int) objects[4];
+        if (objects.length >= 6) {
+            calling = (IAsyncCalling) objects[5];
+        }
 
         try {
 
@@ -124,8 +128,11 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
 
         if (result == ASYNC_TASK_COMPLETED) {
             pa.notifyDataSetChanged();
-        }
 
+            if (pa.isEmpty()) {
+                calling.reportNoResults();
+            }
+        }
     }
 
     @Override
