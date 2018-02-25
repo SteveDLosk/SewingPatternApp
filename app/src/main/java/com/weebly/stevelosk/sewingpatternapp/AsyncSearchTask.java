@@ -127,7 +127,8 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             pa.notifyDataSetChanged();
 
             if (pa.isEmpty()) {
-                calling.reportNoResults();
+                if (calling != null)
+                    calling.reportNoResults();
             }
         }
     }
