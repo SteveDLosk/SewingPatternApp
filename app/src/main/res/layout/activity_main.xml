@@ -3,17 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.weebly.stevelosk.sewingpatternapp.MainActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="4dp"
+        android:orientation="vertical"
         android:layout_weight="1">
 
+        <TextView
+            android:id="@+id/topLeftTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/BasicSearchActivity"
+            android:textAlignment="center"
+            android:textColor="@color/colorDampAsh"
+            android:textSize="24sp" />
 
-        <android.support.v7.widget.AppCompatImageButton
+        <ImageView
 
             android:id="@+id/imgButtonTopLeft"
             android:src="@drawable/button_blue"
@@ -22,9 +32,18 @@
             android:layout_weight="1"
             android:scaleType="centerInside"/>
 
-        <android.support.v7.widget.AppCompatImageButton
+        <TextView
+            android:id="@+id/bottomLeftTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/BrowseActivity"
+            android:textAlignment="center"
+            android:textColor="@color/colorDampAsh"
+            android:textSize="24sp" />
 
-            android:id="@+id/imgButtonTopRight"
+        <ImageView
+
+            android:id="@+id/imgButtonBottomLeft"
             android:src="@drawable/button_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,22 +54,40 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="4dp"
         android:layout_weight="1">
 
-        <android.support.v7.widget.AppCompatImageButton
+        <TextView
+            android:id="@+id/topRightTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/AddPatternActivity"
+            android:textAlignment="center"
+            android:textColor="@color/colorDampAsh"
+            android:textSize="24sp" />
 
-            android:id="@+id/imgButtonBottomLeft"
+        <ImageView
+            android:id="@+id/imgButtonTopRight"
             android:src="@drawable/button_yellow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:scaleType="centerInside"/>
 
-        <android.support.v7.widget.AppCompatImageButton
+        <TextView
+            android:id="@+id/bottomRightTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/AdvancedSearchActivity"
+            android:textAlignment="center"
+            android:textColor="@color/colorDampAsh"
+            android:textSize="24sp" />
 
+        <ImageView
             android:id="@+id/imgButtonBottomRight"
             android:src="@drawable/button_green"
             android:layout_width="wrap_content"
