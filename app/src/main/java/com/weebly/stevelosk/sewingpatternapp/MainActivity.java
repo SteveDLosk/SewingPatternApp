@@ -11,10 +11,10 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageButton topRightButton;
-    private ImageButton topLeftButton;
-    private ImageButton bottomLeftButton;
-    private ImageButton bottomRightButton;
+    private ImageView topRightButton;
+    private ImageView topLeftButton;
+    private ImageView bottomLeftButton;
+    private ImageView bottomRightButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
        // db.upgrade(3);
 
 
-        topRightButton = (ImageButton) findViewById(R.id.imgButtonTopRight);
+        topRightButton = (ImageView) findViewById(R.id.imgButtonTopRight);
         topRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        topLeftButton = (ImageButton) findViewById(R.id.imgButtonTopLeft);
+        topLeftButton = (ImageView) findViewById(R.id.imgButtonTopLeft);
         topLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bottomLeftButton = (ImageButton) findViewById(R.id.imgButtonBottomLeft);
+        bottomLeftButton = (ImageView) findViewById(R.id.imgButtonBottomLeft);
         bottomLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bottomRightButton = (ImageButton) findViewById(R.id.imgButtonBottomRight);
+        bottomRightButton = (ImageView) findViewById(R.id.imgButtonBottomRight);
         bottomRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

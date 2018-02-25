@@ -33,4 +33,8 @@
     <string name="sizes">Sizes</string>
     <string name="contents">Contents</string>
     <string name="notes">Notes</string>
+    <string name="BasicSearchActivity">Basic Search</string>
+    <string name="AdvancedSearchActivity">Advanced Search</string>
+    <string name="AddPatternActivity">Add New Pattern</string>
+    <string name="BrowseActivity">Browse</string>
 </resources>
