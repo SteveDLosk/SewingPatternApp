@@ -107,9 +107,6 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
                     Pattern p = PatternDBAdapter.getPatternFromCursor(cursor);
                     int min = p.getMinNumericSize();
                     int max = p.getMaxNumericSize();
-                    Log.w("tag", String.valueOf(min));
-                    Log.w("tag", String.valueOf(max));
-                    Log.w("tag", p.toString());
                     patterns.add(p);
                     if (this.isCancelled()) {
                         return ASYNC_TASK_CANCELLED;
