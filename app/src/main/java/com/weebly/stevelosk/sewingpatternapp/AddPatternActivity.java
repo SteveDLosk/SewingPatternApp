@@ -3,8 +3,12 @@ package com.weebly.stevelosk.sewingpatternapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.SystemClock;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import com.weebly.stevelosk.sewingpatternapp.BuildConfig;
+
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 
@@ -23,6 +27,7 @@ public class AddPatternActivity extends AppCompatActivity {
 
     static final int REQUEST_FRONT_IMAGE_CAPTURE = 1;
     static final int REQUEST_BACK_IMAGE_CAPTURE = 2;
+    static final String TAG = "_AddPatternActivity";
     static boolean hasFrontImage = false;
     static boolean hasBackImage = false;
 
@@ -134,6 +139,26 @@ public class AddPatternActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, id);
         }
+    }
+
+    private File createImageFile(String patternNum, int front_or_back) throws IOException {
+        /**
+         *  creates a File name for the image taken for the pattern.  Uses an underscore and the
+         *  final integer values for a front or back image to append to the pattern name.
+         *  For instance, pattern number M3422, front would be M3422_1
+         */
+        // Create an image file name for the pictures
+        String imageFileName = patternNumberET.getText().toString();
+        imageFileName += front_or_back;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        Log.d(TAG, image.getAbsolutePath());
+        return image;
     }
 
 
