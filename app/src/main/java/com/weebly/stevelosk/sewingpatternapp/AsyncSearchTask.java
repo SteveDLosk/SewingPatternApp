@@ -28,7 +28,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     protected static final int CLOSE_ANY_TEXT_FIELD_MATCH = 5;
     protected static final int COMPLEX_SEARCH = 6;
 
-    // The passed in objects, in paramater order:
+    // The passed in objects, in parameter order:
     private String searchStr = "";
     private String[] advancedSearchStrings = null;
     private ArrayList<Pattern> patterns = null;
@@ -40,9 +40,11 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     @Override
     protected Integer doInBackground(Object... objects) {
 
+        /* First, determine if the query is a simple or advanced search.  If it is a simple
+           search, the first object will be a String, representing the actual query.  Otherwise,
+           the first object will be an array of Strings for an advanced search
+         */
         boolean simple;
-
-        // get query content and result set target from packaged objects
         if (objects[0] instanceof String) {
             simple = true;
             searchStr = (String) objects[0];
@@ -52,6 +54,7 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             advancedSearchStrings = (String[])  objects[0];
         }
 
+        // get query content and result set target from packaged objects
         patterns = (ArrayList<Pattern>) objects[1];
         db = (PatternDBAdapter) objects[2];
         pa = (PatternAdapter) objects[3];
@@ -67,7 +70,11 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
             Cursor cursor = null;
 
             if (simple) {
-                // query
+                /* Build a predicate based on the original string.  Make four copies, because
+                   getPatternByAnyTextField looks in four places.  Each of these copies of the
+                   original String becomes a where clause argument to the database SQL call.
+                   Any extra copies of the String are unused, but harmless.
+                */
                 String[] predicate = new String[4];
                 // surround search string with "%" so partial matches can be found
                 predicate[0] = "%" + searchStr + "%";
@@ -123,9 +130,11 @@ class AsyncSearchTask extends AsyncTask<Object, Void, Integer>  {
     @Override
     protected void onPostExecute(Integer result) {
 
+        // callback to the UI thread that the views can be updated with new data
         if (result == ASYNC_TASK_COMPLETED) {
             pa.notifyDataSetChanged();
 
+            // callback to UI showing query is complete, there just is no data to show
             if (pa.isEmpty()) {
                 if (calling != null)
                     calling.reportNoResults();
